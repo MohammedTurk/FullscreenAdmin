@@ -8,7 +8,7 @@ export type AppConfig = {
 }
 
 const appConfig: AppConfig = {
-    apiPrefix: 'https://fullscreen.onrender.com/api',
+    apiPrefix: import.meta.env.VITE_NEXT_PUBLIC_API_ENDPOINT,
     authenticatedEntryPath: '/home',
     unAuthenticatedEntryPath: '/sign-in',
     tourPath: '/',

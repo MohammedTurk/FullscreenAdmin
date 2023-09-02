@@ -165,7 +165,7 @@ const JobForm = forwardRef<FormikRef, JobForm>((props, ref) => {
                         'requirements[en]',
                         data.englishRequirements
                     )
-                    formData.append('file', data.image)
+                    // formData.append('file', data.image)
                     formData.append('location', data.location)
 
                     onFormSubmit?.(formData, setSubmitting)
@@ -182,13 +182,13 @@ const JobForm = forwardRef<FormikRef, JobForm>((props, ref) => {
                                         values={values}
                                     />
                                 </div>
-                                <div className="lg:col-span-1">
+                                {/* <div className="lg:col-span-1">
                                     <JobImages
                                         values={values}
                                         errors={errors}
                                         touched={touched}
                                     />
-                                </div>
+                                </div> */}
                             </div>
                             <StickyFooter
                                 className="-mx-8 px-8 flex items-center justify-between py-4"

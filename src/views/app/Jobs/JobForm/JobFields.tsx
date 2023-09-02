@@ -29,10 +29,8 @@ const JobFields = (props: JobFields) => {
 
     return (
         <AdaptableCard divider className="mb-4">
-            <h5>Testimonial Information</h5>
-            <p className="mb-6">
-                Section to config basic testimonial information
-            </p>
+            <h5>Job Information</h5>
+            <p className="mb-6">Section to config basic job information</p>
             <FormItem
                 label="Arabic Job Title"
                 invalid={(errors.arabicTitle && touched.arabicTitle) as boolean}
@@ -57,6 +55,20 @@ const JobFields = (props: JobFields) => {
                     type="text"
                     autoComplete="off"
                     name="englishTitle"
+                    placeholder="Job Title"
+                    component={Input}
+                />
+            </FormItem>
+
+            <FormItem
+                label="Location"
+                invalid={(errors.location && touched.location) as boolean}
+                errorMessage={errors.location}
+            >
+                <Field
+                    type="text"
+                    autoComplete="off"
+                    name="location"
                     placeholder="Job Title"
                     component={Input}
                 />
@@ -212,23 +224,6 @@ const JobFields = (props: JobFields) => {
                 errorMessage={errors.englishRequirements}
             >
                 <Field name="englishRequirements">
-                    {({ field, form }: FieldProps) => (
-                        <RichTextEditor
-                            value={field.value}
-                            onChange={(val) =>
-                                form.setFieldValue(field.name, val)
-                            }
-                        />
-                    )}
-                </Field>
-            </FormItem>
-            <FormItem
-                label="English Location"
-                labelClass="!justify-start"
-                invalid={(errors.location && touched.location) as boolean}
-                errorMessage={errors.location}
-            >
-                <Field name="location">
                     {({ field, form }: FieldProps) => (
                         <RichTextEditor
                             value={field.value}

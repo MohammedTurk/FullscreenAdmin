@@ -20,30 +20,33 @@ import TestimonialForm, {
 } from '@/views/app/Testimonial/TestimonialForm/TestimonialForm'
 import isEmpty from 'lodash/isEmpty'
 
-injectReducer('testimonialEditSlice', reducer)
+injectReducer('jobsEditSlice', reducer)
 
-const TestimonialEdit = () => {
+export const EditJob = () => {
     const dispatch = useAppDispatch()
 
     const location = useLocation()
     const navigate = useNavigate()
 
-    const testimonialData = useAppSelector(
-        (state) => state.testimonialEditSlice.data.TestimonialData
+    const JobsData = useAppSelector(
+        (state) => state.jobsEditSlice.data.JobsData
     )
     const data: any = {
         tags: [],
     }
-    if (testimonialData) {
-        data.image = testimonialData?.data?.image
-        data.arabicContent = testimonialData?.data?.content?.ar
-        data.englishContent = testimonialData?.data?.content?.en
-        data.name = testimonialData?.data?.name
-    }
+    if (JobsData) {
+        data.image = JobsData?.data?.image
+        data.arabicContent = JobsData?.data?.content?.ar
+        data.englishContent = JobsData?.data?.content?.en
+        data.name = JobsData?.data?.name
 
-    const loading = useAppSelector(
-        (state) => state.testimonialEditSlice.data.loading
-    )
+
+        data.arabicTitle = JobsData?.data?.content?.ar
+        data.englishTitle = JobsData?.data?.content?.en
+
+       
+
+    const loading = useAppSelector((state) => state.jobsEditSlice.data.loading)
 
     const fetchData = (data: { _id: string }) => {
         dispatch(getTestimonial(data))
@@ -55,10 +58,7 @@ const TestimonialEdit = () => {
     ) => {
         setSubmitting(true)
 
-        const success = await updateTestimonial(
-            values,
-            testimonialData?.data?._id
-        )
+        const success = await updateTestimonial(values, JobsData?.data?._id)
         setSubmitting(false)
         if (success) {
             popNotification('updated')
@@ -66,13 +66,13 @@ const TestimonialEdit = () => {
     }
 
     const handleDiscard = () => {
-        navigate('/testimonials')
+        navigate('/jobs')
     }
 
     const handleDelete = async (setDialogOpen: OnDeleteCallback) => {
         setDialogOpen(false)
         const success = await deleteTestimonial({
-            _id: testimonialData?.data?._id,
+            _id: JobsData?.data?._id,
         })
         if (success) {
             popNotification('deleted')
@@ -86,13 +86,13 @@ const TestimonialEdit = () => {
                 type="success"
                 duration={2500}
             >
-                Testimonial successfuly {keyword}
+                Job successfuly {keyword}
             </Notification>,
             {
                 placement: 'top-center',
             }
         )
-        navigate('/testimonials')
+        navigate('/jobs')
     }
 
     useEffect(() => {
@@ -108,7 +108,7 @@ const TestimonialEdit = () => {
     return (
         <>
             <Loading loading={loading}>
-                {!isEmpty(testimonialData) && (
+                {!isEmpty(JobsData) && (
                     <>
                         <TestimonialForm
                             type="edit"
@@ -120,18 +120,18 @@ const TestimonialEdit = () => {
                     </>
                 )}
             </Loading>
-            {!loading && isEmpty(testimonialData) && (
+            {!loading && isEmpty(JobsData) && (
                 <div className="h-full flex flex-col items-center justify-center">
                     <DoubleSidedImage
                         src="/img/others/img-2.png"
                         darkModeSrc="/img/others/img-2-dark.png"
                         alt="No product found!"
                     />
-                    <h3 className="mt-8">No testimonial found!</h3>
+                    <h3 className="mt-8">No Job found!</h3>
                 </div>
             )}
         </>
     )
 }
 
-export default TestimonialEdit
+export default EditJob
