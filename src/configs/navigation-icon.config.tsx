@@ -7,6 +7,7 @@ import {
     HiOutlineBookOpen,
     HiOutlineUserGroup,
     HiOutlineDocumentText,
+    HiInbox,
 } from 'react-icons/hi'
 
 export type NavigationIcons = Record<string, JSX.Element>
@@ -20,6 +21,7 @@ const navigationIcon: NavigationIcons = {
     articles: <HiOutlineBookOpen />,
     jobs: <HiOutlineDocumentText />,
     testimonials: <HiOutlineUserGroup />,
+    packages: <HiInbox />,
 }
 
 export default navigationIcon

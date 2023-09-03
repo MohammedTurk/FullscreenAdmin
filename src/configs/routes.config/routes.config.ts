@@ -140,4 +140,24 @@ export const protectedRoutes = [
         ),
         authority: [],
     },
+
+    {
+        key: 'jobs.allPackages',
+        path: '/allPackages',
+        component: lazy(() => import('@/views/app/Packages/PackagesList')),
+        authority: [],
+    },
+
+    {
+        key: 'jobs.packageItems',
+        path: '/package/:id',
+        component: lazy(() => import('@/views/app/Packages/PackageItemsList')),
+        authority: [],
+    },
+    {
+        key: 'packages.addPackage',
+        path: '/add-package',
+        component: lazy(() => import('@/views/app/Packages/AddPackage')),
+        authority: [],
+    },
 ]
