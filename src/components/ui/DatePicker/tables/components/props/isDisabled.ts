@@ -23,5 +23,6 @@ export default function isDisabled({
         minDate instanceof Date && dayjs(minDate).isAfter(date, 'day')
     const shouldExclude = typeof disableDate === 'function' && disableDate(date)
     const disabledOutside = !!disableOutOfMonth && !!outOfMonth
+    return shouldExclude || disabledOutside
     return isAfterMax || isBeforeMin || shouldExclude || disabledOutside
 }
