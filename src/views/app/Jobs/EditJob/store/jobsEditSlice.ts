@@ -1,9 +1,9 @@
-import { apiGetJobDetails, apiUpdateJob } from '@/services/JobsList'
 import {
-    apiDeleteTestimonial,
-    apiGetTestimonialDetails,
-    apiUpdateTestimonial,
-} from '@/services/TestimonialsList'
+    apiDeleteJob,
+    apiGetJobDetails,
+    apiUpdateJob,
+} from '@/services/JobsList'
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 export type jobsEditState = {
@@ -29,12 +29,12 @@ export const updateJob = async <T, U extends Record<string, unknown>>(
     return response.data
 }
 
-// export const deleteJob = async <T, U extends Record<string, unknown>>(
-//     data: U
-// ) => {
-//     const response = await apiDeleteTestimonial(data)
-//     return response.data
-// }
+export const deleteJob = async <T, U extends Record<string, unknown>>(
+    data: U
+) => {
+    const response = await apiDeleteJob(data)
+    return response.data
+}
 
 const initialState: jobsEditState = {
     loading: true,

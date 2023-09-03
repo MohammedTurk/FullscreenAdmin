@@ -182,8 +182,7 @@ const TestimonialImages = (props: ServiceImagesProps) => {
         form: FormikProps<FormModel>,
         field: FieldInputProps<FormModel>
     ) => {
-        console.log('field.name', field.name)
-
+ 
         form.setFieldValue('imgList', [])
         form.setFieldValue('image', '')
     }

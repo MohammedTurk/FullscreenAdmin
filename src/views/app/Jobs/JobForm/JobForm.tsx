@@ -9,7 +9,7 @@ import { HiOutlineTrash } from 'react-icons/hi'
 import { AiOutlineSave } from 'react-icons/ai'
 import * as Yup from 'yup'
 import JobFields from './JobFields'
-import JobImages from './JobImages'
+import JobFile from './JobFile'
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
@@ -26,8 +26,8 @@ type InitialData = {
     arabicRequirements?: string
     englishRequirements?: string
     location?: string
-    image?: string
-    imgList?: {
+    file?: any
+    fileList?: {
         id: string
         name: string
         img: string
@@ -72,7 +72,7 @@ const validationSchema = Yup.object().shape({
         'English Requirements is Required'
     ),
     location: Yup.string().required('Location is Required'),
-    image: Yup.mixed().required('Image is Required'),
+    file: Yup.mixed().required('File is Required'),
 })
 
 const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
@@ -105,7 +105,7 @@ const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
             <ConfirmDialog
                 isOpen={dialogOpen}
                 type="danger"
-                title="Delete article"
+                title="Delete Job"
                 confirmButtonColor="red-600"
                 onClose={onConfirmDialogClose}
                 onRequestClose={onConfirmDialogClose}
@@ -133,8 +133,8 @@ const JobForm = forwardRef<FormikRef, JobForm>((props, ref) => {
             arabicRequirements: '',
             englishRequirements: '',
             location: '',
-            imgList: [],
-            image: '',
+            fileList: [],
+            file: '',
         },
         onFormSubmit,
         onDiscard,
@@ -165,7 +165,7 @@ const JobForm = forwardRef<FormikRef, JobForm>((props, ref) => {
                         'requirements[en]',
                         data.englishRequirements
                     )
-                    // formData.append('file', data.image)
+                    formData.append('file', data.file)
                     formData.append('location', data.location)
 
                     onFormSubmit?.(formData, setSubmitting)
@@ -182,13 +182,13 @@ const JobForm = forwardRef<FormikRef, JobForm>((props, ref) => {
                                         values={values}
                                     />
                                 </div>
-                                {/* <div className="lg:col-span-1">
-                                    <JobImages
+                                <div className="lg:col-span-1">
+                                    <JobFile
                                         values={values}
                                         errors={errors}
                                         touched={touched}
                                     />
-                                </div> */}
+                                </div>
                             </div>
                             <StickyFooter
                                 className="-mx-8 px-8 flex items-center justify-between py-4"

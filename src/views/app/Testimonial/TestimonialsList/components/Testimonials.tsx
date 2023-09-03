@@ -28,10 +28,6 @@ const Testimonials = () => {
     const testimonialsData = useAppSelector(
         (state) => state.testimonialsSlice?.data?.testimonialsData
     )
-    console.log(
-        'state.testimonialsSlice',
-        useAppSelector((state) => state)
-    )
 
     const testimonialsDeleteConfirmation = useAppSelector(
         (state) => state.testimonialsSlice?.data?.testimonialDeleteConfirmation

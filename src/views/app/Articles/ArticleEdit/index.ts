@@ -1,3 +1,3 @@
-import ServiceEdit from './ServiceEdit'
+import ArticleEdit from './ArticleEdit'
 
-export default ServiceEdit
+export default ArticleEdit

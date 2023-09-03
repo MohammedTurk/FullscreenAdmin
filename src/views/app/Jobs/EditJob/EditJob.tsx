@@ -6,19 +6,20 @@ import Notification from '@/components/ui/Notification'
 import reducer, {
     useAppSelector,
     useAppDispatch,
-    updateTestimonial,
-    deleteTestimonial,
-    getTestimonial,
+    updateJob,
+    deleteJob,
+    getJob,
 } from './store'
 import { injectReducer } from '@/store'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import TestimonialForm, {
+import JobForm, {
     FormModel,
     SetSubmitting,
     OnDeleteCallback,
-} from '@/views/app/Testimonial/TestimonialForm/TestimonialForm'
+} from '@/views/app/Jobs/JobForm/JobForm'
 import isEmpty from 'lodash/isEmpty'
+import { apiGetJobDetails } from '@/services/JobsList'
 
 injectReducer('jobsEditSlice', reducer)
 
@@ -31,25 +32,25 @@ export const EditJob = () => {
     const JobsData = useAppSelector(
         (state) => state.jobsEditSlice.data.JobsData
     )
-    const data: any = {
-        tags: [],
-    }
+    const data: any = {}
     if (JobsData) {
-        data.image = JobsData?.data?.image
-        data.arabicContent = JobsData?.data?.content?.ar
-        data.englishContent = JobsData?.data?.content?.en
-        data.name = JobsData?.data?.name
-
-
-        data.arabicTitle = JobsData?.data?.content?.ar
-        data.englishTitle = JobsData?.data?.content?.en
-
-       
-
+        data.arabicTitle = JobsData?.data?.title?.ar
+        data.englishTitle = JobsData?.data?.title?.en
+        data.arabicDescription = JobsData?.data?.description?.ar
+        data.englishDescription = JobsData?.data?.description?.en
+        data.arabicType = JobsData?.data?.type?.ar
+        data.englishType = JobsData?.data?.type?.en
+        data.arabicCategory = JobsData?.data?.category?.en
+        data.englishCategory = JobsData?.data?.category?.en
+        data.arabicRequirements = JobsData?.data?.requirements?.en
+        data.englishRequirements = JobsData?.data?.requirements?.en
+        data.location = JobsData?.category?.location
+        data.file = JobsData?.data?.file
+    }
     const loading = useAppSelector((state) => state.jobsEditSlice.data.loading)
 
     const fetchData = (data: { _id: string }) => {
-        dispatch(getTestimonial(data))
+        dispatch(getJob(data))
     }
 
     const handleFormSubmit = async (
@@ -58,7 +59,7 @@ export const EditJob = () => {
     ) => {
         setSubmitting(true)
 
-        const success = await updateTestimonial(values, JobsData?.data?._id)
+        const success = await updateJob(values, JobsData?.data?._id)
         setSubmitting(false)
         if (success) {
             popNotification('updated')
@@ -71,7 +72,7 @@ export const EditJob = () => {
 
     const handleDelete = async (setDialogOpen: OnDeleteCallback) => {
         setDialogOpen(false)
-        const success = await deleteTestimonial({
+        const success = await deleteJob({
             _id: JobsData?.data?._id,
         })
         if (success) {
@@ -109,15 +110,13 @@ export const EditJob = () => {
         <>
             <Loading loading={loading}>
                 {!isEmpty(JobsData) && (
-                    <>
-                        <TestimonialForm
-                            type="edit"
-                            initialData={data}
-                            onFormSubmit={handleFormSubmit}
-                            onDiscard={handleDiscard}
-                            onDelete={handleDelete}
-                        />
-                    </>
+                    <JobForm
+                        type="edit"
+                        initialData={data}
+                        onFormSubmit={handleFormSubmit}
+                        onDiscard={handleDiscard}
+                        onDelete={handleDelete}
+                    />
                 )}
             </Loading>
             {!loading && isEmpty(JobsData) && (

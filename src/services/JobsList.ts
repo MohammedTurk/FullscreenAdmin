@@ -10,9 +10,36 @@ export async function apiGetAllJobs() {
     })
 }
 
+export async function apiGetAllJobApplications() {
+    return ApiService.fetchData({
+        url: '/job/applications',
+        method: 'get',
+        headers: {
+            'Accept-Language': 'ar',
+        },
+    })
+}
+
+export async function apiGetSingleJobApplicationList(data: any) {
+    return ApiService.fetchData({
+        url: `/job/applications?jobId=${data._id}`,
+        method: 'get',
+        headers: {
+            'Accept-Language': 'ar',
+        },
+    })
+}
+
+export async function apiGetSingleJopApplicationDetails(data: any) {
+    return ApiService.fetchData({
+        url: `/job/applications/details/${data._id}`,
+        method: 'get',
+    })
+}
+
 export async function apiDeleteJob(data: any) {
     return ApiService.fetchData({
-        url: `/testimonial/delete/${data._id}`,
+        url: `/job/delete/${data._id}`,
         method: 'delete',
     })
 }
@@ -29,7 +56,7 @@ export async function apiGetJobDetails<T, U extends Record<string, unknown>>(
     params: U
 ) {
     return ApiService.fetchData({
-        url: '/job/details/' + params._id,
+        url: '/job/info/' + params._id,
         method: 'get',
         headers: {
             'Accept-Language': 'ar',

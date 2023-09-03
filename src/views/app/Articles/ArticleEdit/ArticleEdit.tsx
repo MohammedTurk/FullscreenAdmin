@@ -35,8 +35,6 @@ const ArticleEdit = () => {
         tags: [],
     }
     if (articleData) {
-        console.log('articleData', articleData)
-
         data.image = articleData?.data?.image
         data.content = articleData?.data?.content
         data.title = articleData?.data?.title
@@ -104,7 +102,6 @@ const ArticleEdit = () => {
         const path = location.pathname.substring(
             location.pathname.lastIndexOf('/') + 1
         )
-        console.log(path)
 
         const rquestParam = { _id: path }
         fetchData(rquestParam)

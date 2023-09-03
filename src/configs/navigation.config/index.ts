@@ -138,6 +138,16 @@ const navigationConfig: NavigationTree[] = [
                 authority: [],
                 subMenu: [],
             },
+            {
+                key: 'jobs.allJobApplications',
+                path: '/job-applications',
+                title: 'All Job Applications',
+                translateKey: 'nav.jobs.allJobApplications',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
         ],
     },
 ]

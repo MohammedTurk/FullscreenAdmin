@@ -1,4 +1,4 @@
-import { apiGetAllJobs } from '@/services/JobsList'
+import { apiDeleteJob, apiGetAllJobs } from '@/services/JobsList'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 export type jobsState = {
@@ -20,10 +20,10 @@ export const getAllJobs = createAsyncThunk(
     }
 )
 
-// export const deleteTestimonial = async (data: { _id: string | string[] }) => {
-//     const response = await apiDeleteTestimonial(data)
-//     return response.data
-// }
+export const deleteJob = async (data: { _id: string | string[] }) => {
+    const response = await apiDeleteJob(data)
+    return response.data
+}
 
 const initialState: jobsState = {
     loading: false,

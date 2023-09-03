@@ -72,12 +72,6 @@ const ServiceEdit = () => {
 
     const handleDelete = async (setDialogOpen: OnDeleteCallback) => {
         setDialogOpen(false)
-        // const path = location.pathname.substring(
-        //     location.pathname.lastIndexOf('/') + 1
-        // )
-
-        // const rquestParam = { _id: path }
-        // console.log('serviceData._id ', serviceData._id)
 
         const success = await deleteService({ _id: serviceData?.data?._id })
         if (success) {

@@ -3,6 +3,7 @@ import RichTextEditor from '@/components/shared/RichTextEditor'
 import Input from '@/components/ui/Input'
 import { FormItem } from '@/components/ui/Form'
 import { Field, FormikErrors, FormikTouched, FieldProps } from 'formik'
+import { Select } from '@/components/ui'
 
 type FormFieldsName = {
     arabicTitle?: string
@@ -26,6 +27,18 @@ type JobFields = {
 
 const JobFields = (props: JobFields) => {
     const { values, touched, errors } = props
+    const englishTypes = [
+        { label: 'Full Time', value: 'full time' },
+        { label: 'Part Time', value: 'part time' },
+        { label: 'Freelance', value: 'freelance' },
+        { label: 'Internship', value: 'internship' },
+    ]
+    const arabicTypes = [
+        { label: 'دوام كامل', value: 'دوام كامل' },
+        { label: 'دوام جزئي', value: 'دوام جزئي' },
+        { label: 'عمل حر', value: 'عمل حر' },
+        { label: 'تدريب', value: 'تدريب' },
+    ]
 
     return (
         <AdaptableCard divider className="mb-4">
@@ -75,6 +88,81 @@ const JobFields = (props: JobFields) => {
             </FormItem>
 
             <FormItem
+                label="Arabic Category"
+                invalid={
+                    (errors.arabicCategory && touched.arabicCategory) as boolean
+                }
+                errorMessage={errors.arabicCategory}
+            >
+                <Field
+                    type="text"
+                    autoComplete="off"
+                    name="arabicCategory"
+                    placeholder="Category"
+                    component={Input}
+                />
+            </FormItem>
+            <FormItem
+                label="English Category"
+                invalid={
+                    (errors.englishCategory &&
+                        touched.englishCategory) as boolean
+                }
+                errorMessage={errors.englishCategory}
+            >
+                <Field
+                    type="text"
+                    autoComplete="off"
+                    name="englishCategory"
+                    placeholder="Category"
+                    component={Input}
+                />
+            </FormItem>
+
+            <FormItem
+                label="Arabic Type"
+                invalid={(errors.arabicType && touched.arabicType) as boolean}
+                errorMessage={errors.arabicType}
+            >
+                <Field name="arabicType">
+                    {({ field, form }: FieldProps) => (
+                        <Select
+                            field={field}
+                            form={form}
+                            options={arabicTypes}
+                            value={arabicTypes.filter(
+                                (type) => type.value === values.arabicType
+                            )}
+                            onChange={(option) => {
+                                form.setFieldValue(field.name, option?.value)
+                            }}
+                        />
+                    )}
+                </Field>
+            </FormItem>
+
+            <FormItem
+                label="English Type"
+                invalid={(errors.englishType && touched.englishType) as boolean}
+                errorMessage={errors.englishType}
+            >
+                <Field name="englishType">
+                    {({ field, form }: FieldProps) => (
+                        <Select
+                            field={field}
+                            form={form}
+                            options={englishTypes}
+                            value={englishTypes.filter(
+                                (type) => type.value === values.englishType
+                            )}
+                            onChange={(option) => {
+                                form.setFieldValue(field.name, option?.value)
+                            }}
+                        />
+                    )}
+                </Field>
+            </FormItem>
+            <FormItem
                 label="Arabic Description"
                 labelClass="!justify-start"
                 invalid={
@@ -115,84 +203,6 @@ const JobFields = (props: JobFields) => {
                     )}
                 </Field>
             </FormItem>
-
-            <FormItem
-                label="Arabic Category"
-                labelClass="!justify-start"
-                invalid={
-                    (errors.arabicCategory && touched.arabicCategory) as boolean
-                }
-                errorMessage={errors.arabicCategory}
-            >
-                <Field name="arabicCategory">
-                    {({ field, form }: FieldProps) => (
-                        <RichTextEditor
-                            value={field.value}
-                            onChange={(val) =>
-                                form.setFieldValue(field.name, val)
-                            }
-                        />
-                    )}
-                </Field>
-            </FormItem>
-
-            <FormItem
-                label="English Category"
-                labelClass="!justify-start"
-                invalid={
-                    (errors.englishCategory &&
-                        touched.englishDescription) as boolean
-                }
-                errorMessage={errors.englishCategory}
-            >
-                <Field name="englishCategory">
-                    {({ field, form }: FieldProps) => (
-                        <RichTextEditor
-                            value={field.value}
-                            onChange={(val) =>
-                                form.setFieldValue(field.name, val)
-                            }
-                        />
-                    )}
-                </Field>
-            </FormItem>
-
-            <FormItem
-                label="Arabic Type"
-                labelClass="!justify-start"
-                invalid={(errors.arabicType && touched.arabicType) as boolean}
-                errorMessage={errors.arabicType}
-            >
-                <Field name="arabicType">
-                    {({ field, form }: FieldProps) => (
-                        <RichTextEditor
-                            value={field.value}
-                            onChange={(val) =>
-                                form.setFieldValue(field.name, val)
-                            }
-                        />
-                    )}
-                </Field>
-            </FormItem>
-
-            <FormItem
-                label="English Type"
-                labelClass="!justify-start"
-                invalid={(errors.englishType && touched.englishType) as boolean}
-                errorMessage={errors.englishType}
-            >
-                <Field name="englishType">
-                    {({ field, form }: FieldProps) => (
-                        <RichTextEditor
-                            value={field.value}
-                            onChange={(val) =>
-                                form.setFieldValue(field.name, val)
-                            }
-                        />
-                    )}
-                </Field>
-            </FormItem>
-
             <FormItem
                 label="Arabic Requirements"
                 labelClass="!justify-start"

@@ -101,12 +101,43 @@ export const protectedRoutes = [
         component: lazy(() => import('@/views/app/Jobs/AddJob')),
         authority: [],
     },
-    // {
-    //     key: 'jobs.editJob',
-    //     path: '/edit-testimonial/:id',
-    //     component: lazy(
-    //         () => import('@/views/app/Testimonial/TestimonialEdit')
-    //     ),
-    //     authority: [],
-    // },
+    {
+        key: 'jobs.editJob',
+        path: '/edit-job/:id',
+        component: lazy(() => import('@/views/app/Jobs/EditJob')),
+        authority: [],
+    },
+    {
+        key: 'jobs.allJobApplications',
+        path: '/job-applications',
+        component: lazy(
+            () =>
+                import(
+                    '@/views/app/Jobs/JopApplicationsList/JopApplicationsList'
+                )
+        ),
+        authority: [],
+    },
+    {
+        key: 'jobs.singleJobApplicationList',
+        path: '/view-job-Application/:id',
+        component: lazy(
+            () =>
+                import(
+                    '@/views/app/Jobs/JopApplicationsList/SingleJobApplicationList'
+                )
+        ),
+        authority: [],
+    },
+    {
+        key: 'jobs.JobApplicationDetailsForm',
+        path: '/job-Application-details/:id',
+        component: lazy(
+            () =>
+                import(
+                    '@/views/app/Jobs/JopApplicationsList/JobApplicationDetails'
+                )
+        ),
+        authority: [],
+    },
 ]

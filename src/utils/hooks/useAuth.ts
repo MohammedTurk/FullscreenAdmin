@@ -40,7 +40,6 @@ function useAuth() {
                 if (resp.data.data.user) {
                     dispatch(setUser(resp.data.data.user))
                 }
-                console.log(accessToken)
 
                 const redirectUrl = query.get(REDIRECT_URL_KEY)
                 navigate(

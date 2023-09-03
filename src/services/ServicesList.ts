@@ -11,8 +11,6 @@ export async function apiGetAllServices() {
 }
 
 export async function apiDeleteService(data: any) {
-    console.log(data)
-
     return ApiService.fetchData({
         url: `/service/delete/${data._id}`,
         method: 'delete',

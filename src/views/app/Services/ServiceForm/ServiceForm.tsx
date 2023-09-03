@@ -168,15 +168,6 @@ const ServiceForm = forwardRef<FormikRef, ProductForm>((props, ref) => {
                                         errors={errors}
                                         values={values}
                                     />
-                                    {/* <PricingFields
-                                        touched={touched}
-                                        errors={errors}
-                                    />
-                                    <OrganizationFields
-                                        touched={touched}
-                                        errors={errors}
-                                        values={values}
-                                    /> */}
                                 </div>
                                 <div className="lg:col-span-1">
                                     <ServiceImages

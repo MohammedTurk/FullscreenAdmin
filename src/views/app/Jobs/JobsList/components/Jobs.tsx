@@ -10,6 +10,7 @@ import {
     setSelected,
     toggleJobsDeleteConfirmation,
     getAllJobs,
+    deleteJob,
 } from '../store'
 import { useNavigate } from 'react-router-dom'
 import { HiOutlineTrash, HiOutlinePencil } from 'react-icons/hi'
@@ -37,26 +38,26 @@ const Jobs = () => {
     const onJobEdit = (_id: string) => {
         navigate(`/edit-job/${_id}`)
     }
-    const onTestimonialDeleteConfirm = async () => {
-        // const success = await deleteTestimonial({
-        //     _id: selectedJob._id,
-        // })
-        // if (success) {
-        //     dispatch(toggleTestimonialDeleteConfirmation(false))
-        //     dispatch(getAllTestimonials())
-        //     toast.push(
-        //         <Notification
-        //             title={'Successfuly Deleted'}
-        //             type="success"
-        //             duration={2500}
-        //         >
-        //             Testimonial successfuly deleted
-        //         </Notification>,
-        //         {
-        //             placement: 'top-center',
-        //         }
-        //     )
-        // }
+    const onJobDeleteConfirm = async () => {
+        const success = await deleteJob({
+            _id: selectedJob._id,
+        })
+        if (success) {
+            dispatch(toggleJobsDeleteConfirmation(false))
+            dispatch(getAllJobs())
+            toast.push(
+                <Notification
+                    title={'Successfuly Deleted'}
+                    type="success"
+                    duration={2500}
+                >
+                    Job successfuly deleted
+                </Notification>,
+                {
+                    placement: 'top-center',
+                }
+            )
+        }
     }
 
     useEffect(() => {
@@ -67,7 +68,7 @@ const Jobs = () => {
     const fetchData = () => {
         dispatch(getAllJobs())
     }
-    const onTestimonialDeleteConfirmationClose = () => {
+    const onJobDeleteConfirmationClose = () => {
         dispatch(toggleJobsDeleteConfirmation(false))
     }
     function createMarkup(data: any) {
@@ -136,10 +137,10 @@ const Jobs = () => {
                     type="danger"
                     title="Delete job"
                     confirmButtonColor="red-600"
-                    onClose={onTestimonialDeleteConfirmationClose}
-                    onRequestClose={onTestimonialDeleteConfirmationClose}
-                    onCancel={onTestimonialDeleteConfirmationClose}
-                    onConfirm={onTestimonialDeleteConfirm}
+                    onClose={onJobDeleteConfirmationClose}
+                    onRequestClose={onJobDeleteConfirmationClose}
+                    onCancel={onJobDeleteConfirmationClose}
+                    onConfirm={onJobDeleteConfirm}
                 >
                     <p>
                         Are you sure you want to delete this job? This action

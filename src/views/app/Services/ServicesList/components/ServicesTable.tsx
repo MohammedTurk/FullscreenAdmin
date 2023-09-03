@@ -62,8 +62,6 @@ const ActionColumn = ({ row }: { row: service }) => {
 }
 
 const ProductColumn = ({ row }: { row: service }) => {
-    // console.log(row)
-
     const avatar = row.image ? (
         <Avatar src={row.image} />
     ) : (
@@ -106,16 +104,16 @@ const ServicesTable = () => {
         () => [
             {
                 header: 'Name',
+                enableSorting: false,
                 accessorKey: 'name',
                 cell: (props) => {
-                    // console.log(props.row)
-
                     const row = props.row.original
                     return <ProductColumn row={row} />
                 },
             },
             {
                 header: 'Category',
+                enableSorting: false,
                 accessorKey: 'category',
                 cell: (props) => {
                     const row = props.row.original
@@ -123,11 +121,17 @@ const ServicesTable = () => {
                 },
             },
             {
+                enableSorting: false,
                 header: 'Description',
                 accessorKey: 'description',
                 cell: (props) => {
                     const row = props.row.original
-                    const data = createMarkup(row.description)
+
+                    let description = row.description
+                    if (description.length > 50) {
+                        description = description.substring(0, 50) + ' ...'
+                    }
+                    const data = createMarkup(description)
                     return (
                         <span
                             className="capitalize"
@@ -138,6 +142,7 @@ const ServicesTable = () => {
             },
             {
                 header: 'Service Number',
+                enableSorting: false,
                 accessorKey: 'serviceNo',
                 cell: (props) => {
                     const row = props.row.original
