@@ -81,7 +81,7 @@ const navigationConfig: NavigationTree[] = [
     {
         key: 'testimonials',
         path: '',
-        title: 'testimonials Menu',
+        title: 'Testimonials Menu',
         translateKey: 'nav.articles.testimonials',
         icon: 'testimonials',
         type: NAV_ITEM_TYPE_COLLAPSE,
@@ -112,7 +112,7 @@ const navigationConfig: NavigationTree[] = [
     {
         key: 'jobs',
         path: '',
-        title: 'jobs Menu',
+        title: 'Jobs Menu',
         translateKey: 'nav.jobs.jobs',
         icon: 'jobs',
         type: NAV_ITEM_TYPE_COLLAPSE,
@@ -154,7 +154,7 @@ const navigationConfig: NavigationTree[] = [
     {
         key: 'packages',
         path: '',
-        title: 'packages Menu',
+        title: 'Packages Menu',
         translateKey: 'nav.packages.packages',
         icon: 'packages',
         type: NAV_ITEM_TYPE_COLLAPSE,

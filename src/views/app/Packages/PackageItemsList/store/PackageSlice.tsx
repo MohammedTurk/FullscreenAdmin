@@ -1,12 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { TableQueries } from '@/@types/common'
-import { apiGetAllPackages, apiGetPackageItems } from '@/services/PackagesList'
+import {
+    apiGetAllPackages,
+    apiGetPackageDetails,
+    apiGetPackageItems,
+} from '@/services/PackagesList'
 
 export type PackageItemsState = {
     loading: boolean
     selectedPackage: string
     tableData: TableQueries
     packageItemsData: any
+    loadingPackageDetails: boolean
+    packageDetailsData: any
 }
 
 export const SLICE_NAME = 'PackageSlice'
@@ -19,14 +25,14 @@ export const getPackageItems = createAsyncThunk(
     }
 )
 
-// export const getSingleJopApplicationList = createAsyncThunk(
-//     SLICE_NAME + '/getSingleJopApplicationList',
-//     async (rquestParam: any) => {
-//         const response = await apiGetSingleJobApplicationList(rquestParam)
+export const getPackageDetails = createAsyncThunk(
+    SLICE_NAME + '/getPackageDetails',
+    async (rquestParam: any) => {
+        const response = await apiGetPackageDetails(rquestParam)
 
-//         return response.data.data
-//     }
-// )
+        return response.data.data
+    }
+)
 
 // export const getSingleJopApplicationDetails = createAsyncThunk(
 //     SLICE_NAME + '/getSingleJopApplicationDetails',
@@ -48,6 +54,8 @@ const initialState: PackageItemsState = {
     selectedPackage: '',
     packageItemsData: [],
     tableData: initialTableData,
+    loadingPackageDetails: false,
+    packageDetailsData: [],
 }
 
 const PackageSlice = createSlice({
@@ -71,6 +79,14 @@ const PackageSlice = createSlice({
             })
             .addCase(getPackageItems.pending, (state) => {
                 state.loading = true
+            })
+
+            .addCase(getPackageDetails.fulfilled, (state, action) => {
+                state.packageDetailsData = action.payload
+                state.loadingPackageDetails = false
+            })
+            .addCase(getPackageDetails.pending, (state) => {
+                state.loadingPackageDetails = true
             })
     },
 })

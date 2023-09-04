@@ -13,18 +13,13 @@ import { Button, Checkbox, Select } from '@/components/ui'
 import { HiMinusSm, HiPlus } from 'react-icons/hi'
 
 type FormFieldsName = {
-    arabicName?: string
-    englishName?: string
-    price?: string
-    arabicType?: string
-    englishType?: string
-    arabicServiceNames?: string[]
-    englishServiceNames?: string[]
-    arabicItems?: string[]
-    englishItems?: string[]
-    arabicDetails?: string
-    englishDetails?: string
-    isDefault?: boolean
+    name: string
+    price: number
+    details: string
+    items: string[]
+    services: { image: string; name: string }[]
+    type: string
+    isDefault: string
 }
 
 type PackageFields = {
@@ -33,13 +28,15 @@ type PackageFields = {
     values: any
 }
 
-const PackageFields = (props: PackageFields) => {
+const PackageEditFields = (props: PackageFields) => {
     const { values, touched, errors } = props
-    const englishTypes = [
-        { label: '3 Month', value: '3 month' },
-        { label: '6 Month', value: '6 month' },
-        { label: '9 Month', value: '9 month' },
-    ]
+    console.log('values', values)
+
+    // const englishTypes = [
+    //     { label: '3 Month', value: '3 month' },
+    //     { label: '6 Month', value: '6 month' },
+    //     { label: '9 Month', value: '9 month' },
+    // ]
     const arabicTypes = [
         { label: '3 شهور', value: '3 شهور' },
         { label: '6 شهور', value: '6 شهور' },
@@ -48,37 +45,26 @@ const PackageFields = (props: PackageFields) => {
 
     return (
         <AdaptableCard divider className="mb-4">
-            <h5>Package Information</h5>
-            <p className="mb-6">Section to config basic package information</p>
+            <h2 className="mb-6">{values.name}</h2>
             <FormItem
-                label="Arabic Name  "
-                invalid={(errors.arabicName && touched.arabicName) as boolean}
-                errorMessage={errors.arabicName}
+                label="Name"
+                invalid={(errors.name && touched.name) as boolean}
+                errorMessage={errors.name}
             >
                 <Field
                     type="text"
                     autoComplete="off"
-                    name="arabicName"
+                    name="name"
                     placeholder="Name"
                     component={Input}
+                    value={values.name}
                 />
             </FormItem>
-            <FormItem
-                label="English Name  "
-                invalid={(errors.englishName && touched.englishName) as boolean}
-                errorMessage={errors.englishName}
-            >
-                <Field
-                    type="text"
-                    autoComplete="off"
-                    name="englishName"
-                    placeholder="Name"
-                    component={Input}
-                />
-            </FormItem>
+
             <FormItem label="Choose is default or not">
                 <Checkbox name="isDefault">isDefault</Checkbox>
             </FormItem>
+
             <FormItem
                 label="Price"
                 invalid={(errors.price && touched.price) as boolean}
@@ -90,22 +76,23 @@ const PackageFields = (props: PackageFields) => {
                     name="price"
                     placeholder="Job Title"
                     component={Input}
+                    value={values.price}
                 />
             </FormItem>
 
             <FormItem
-                label="Arabic Type"
-                invalid={(errors.arabicType && touched.arabicType) as boolean}
-                errorMessage={errors.arabicType}
+                label="Type"
+                invalid={(errors.type && touched.type) as boolean}
+                errorMessage={errors.type}
             >
-                <Field name="arabicType">
+                <Field name="type">
                     {({ field, form }: FieldProps) => (
                         <Select
                             field={field}
                             form={form}
                             options={arabicTypes}
                             value={arabicTypes.filter(
-                                (type) => type.value === values.arabicType
+                                (type) => type.value === values.type
                             )}
                             onChange={(option) => {
                                 form.setFieldValue(field.name, option?.value)
@@ -115,7 +102,7 @@ const PackageFields = (props: PackageFields) => {
                 </Field>
             </FormItem>
 
-            <FormItem
+            {/* <FormItem
                 label="English Type"
                 invalid={(errors.englishType && touched.englishType) as boolean}
                 errorMessage={errors.englishType}
@@ -135,17 +122,15 @@ const PackageFields = (props: PackageFields) => {
                         />
                     )}
                 </Field>
-            </FormItem>
+            </FormItem> */}
 
             <FormItem
-                label="Arabic Details"
+                label="Details"
                 labelClass="!justify-start"
-                invalid={
-                    (errors.arabicDetails && touched.arabicDetails) as boolean
-                }
-                errorMessage={errors.arabicDetails}
+                invalid={(errors.details && touched.details) as boolean}
+                errorMessage={errors.details}
             >
-                <Field name="arabicDetails">
+                <Field name="details">
                     {({ field, form }: FieldProps) => (
                         <RichTextEditor
                             value={field.value}
@@ -157,7 +142,7 @@ const PackageFields = (props: PackageFields) => {
                 </Field>
             </FormItem>
 
-            <FormItem
+            {/* <FormItem
                 label="English Details"
                 labelClass="!justify-start"
                 invalid={
@@ -175,42 +160,36 @@ const PackageFields = (props: PackageFields) => {
                         />
                     )}
                 </Field>
-            </FormItem>
+            </FormItem> */}
 
             <FieldArray
-                name="arabicServiceNames"
+                name="services"
                 render={(arrayHelpers) => (
                     <div className="mb-5">
-                        {values?.arabicServiceNames?.map(
+                        {values?.services?.map(
                             (service: string, index: number) => (
                                 <div
                                     key={index}
                                     className="flex gap-5 items-center"
                                 >
                                     <FormItem
-                                        label={`Arabic Service ${
-                                            index + 1
-                                        } Name`}
+                                        label={`Service ${index + 1} Name`}
                                         invalid={Boolean(
-                                            errors.arabicServiceNames &&
-                                                errors.arabicServiceNames[
-                                                    index
-                                                ] &&
-                                                touched.arabicServiceNames &&
-                                                touched.arabicServiceNames[
-                                                    index
-                                                ]
+                                            errors.services &&
+                                                errors.services[index] &&
+                                                touched.services &&
+                                                touched.services[index]
                                         )}
                                         errorMessage={
-                                            errors.arabicServiceNames &&
-                                            errors.arabicServiceNames[index]
+                                            errors.services &&
+                                            errors.services[index]
                                         }
                                     >
                                         <Field
                                             className="w-[300px]"
                                             type="text"
                                             autoComplete="off"
-                                            name={`arabicServiceNames.${index}`}
+                                            name={`services[${index}].name`}
                                             placeholder="Service Name"
                                             component={Input}
                                         />
@@ -238,13 +217,13 @@ const PackageFields = (props: PackageFields) => {
                             variant="twoTone"
                             onClick={() => arrayHelpers.push('')}
                         >
-                            Add a new arabic service
+                            Add a new service
                         </Button>
                     </div>
                 )}
             />
 
-            <FieldArray
+            {/* <FieldArray
                 name="englishServiceNames"
                 render={(arrayHelpers) => (
                     <div className="mb-5">
@@ -309,56 +288,51 @@ const PackageFields = (props: PackageFields) => {
                         </Button>
                     </div>
                 )}
-            />
+            /> */}
 
             <FieldArray
-                name="arabicItems"
+                name="items"
                 render={(arrayHelpers) => (
                     <div className="mb-5">
-                        {values?.arabicItems?.map(
-                            (item: string, index: number) => (
-                                <div
-                                    key={index}
-                                    className="flex gap-3 items-center"
+                        {values?.items?.map((item: string, index: number) => (
+                            <div
+                                key={index}
+                                className="flex gap-3 items-center"
+                            >
+                                <FormItem
+                                    label={`Item ${index + 1} Name`}
+                                    invalid={Boolean(
+                                        errors.items &&
+                                            errors.items[index] &&
+                                            touched.items &&
+                                            touched.items[index]
+                                    )}
+                                    errorMessage={
+                                        errors.items && errors.items[index]
+                                    }
                                 >
-                                    <FormItem
-                                        label={`Arabic Item ${index + 1} Name`}
-                                        invalid={Boolean(
-                                            errors.arabicItems &&
-                                                errors.arabicItems[index] &&
-                                                touched.arabicItems &&
-                                                touched.arabicItems[index]
-                                        )}
-                                        errorMessage={
-                                            errors.arabicItems &&
-                                            errors.arabicItems[index]
-                                        }
-                                    >
-                                        <Field
-                                            type="text"
-                                            className="w-[300px]"
-                                            autoComplete="off"
-                                            name={`arabicItems.${index}`}
-                                            placeholder="Item Name"
-                                            component={Input}
-                                        />
-                                    </FormItem>
+                                    <Field
+                                        type="text"
+                                        className="w-[300px]"
+                                        autoComplete="off"
+                                        name={`items[${index}]`}
+                                        placeholder="Item Name"
+                                        component={Input}
+                                    />
+                                </FormItem>
 
-                                    <Button
-                                        type="button"
-                                        variant="twoTone"
-                                        color="red-600"
-                                        size="sm"
-                                        icon={<HiMinusSm />}
-                                        onClick={() =>
-                                            arrayHelpers.remove(index)
-                                        } // remove a product from the list
-                                    >
-                                        Remove
-                                    </Button>
-                                </div>
-                            )
-                        )}
+                                <Button
+                                    type="button"
+                                    variant="twoTone"
+                                    color="red-600"
+                                    size="sm"
+                                    icon={<HiMinusSm />}
+                                    onClick={() => arrayHelpers.remove(index)} // remove a product from the list
+                                >
+                                    Remove
+                                </Button>
+                            </div>
+                        ))}
                         <Button
                             size="md"
                             icon={<HiPlus />}
@@ -366,13 +340,13 @@ const PackageFields = (props: PackageFields) => {
                             variant="twoTone"
                             onClick={() => arrayHelpers.push('')}
                         >
-                            Add a new arabic item
+                            Add a new item
                         </Button>
                     </div>
                 )}
             />
 
-            <FieldArray
+            {/* <FieldArray
                 name="englishItems"
                 render={(arrayHelpers) => (
                     <div className="mb-5">
@@ -431,9 +405,9 @@ const PackageFields = (props: PackageFields) => {
                         </Button>
                     </div>
                 )}
-            />
+            /> */}
         </AdaptableCard>
     )
 }
 
-export default PackageFields
+export default PackageEditFields

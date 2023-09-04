@@ -40,7 +40,7 @@ const Packages = () => {
         dispatch(togglePackageDeleteConfirmation(true))
     }
     const onJobEdit = (_id: string) => {
-        navigate(`/edit-job/${_id}`)
+        // navigate(`/edit-package/${_id}`)
     }
     const onView = (_id: string) => {
         navigate(`/package/${_id}`)

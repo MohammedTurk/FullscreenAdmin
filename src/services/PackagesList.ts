@@ -52,6 +52,18 @@ export async function apiAddNewPackage(data: any) {
     })
 }
 
+export async function apiGetPackageData<T, U extends Record<string, unknown>>(
+    params: U
+) {
+    return ApiService.fetchData({
+        url: '/package/info/' + params._id,
+        method: 'get',
+        headers: {
+            'Accept-Language': 'ar',
+        },
+    })
+}
+
 export async function apiGetPackageDetails<
     T,
     U extends Record<string, unknown>
@@ -65,10 +77,10 @@ export async function apiGetPackageDetails<
     })
 }
 
-// export async function apiUpdateJob(data: any, id: string) {
-//     return ApiService.fetchData({
-//         url: '/job/update/' + id,
-//         method: 'put',
-//         data,
-//     })
-// }
+export async function apiUpdatePackage(data: any, id: string) {
+    return ApiService.fetchData({
+        url: '/package/add' + id,
+        method: 'put',
+        data,
+    })
+}

@@ -17,6 +17,7 @@ type Image = {
 
 type FormModel = {
     imgList: Image[]
+    images: []
     [key: string]: unknown
 }
 
@@ -137,11 +138,12 @@ const PackageImages = (props: ProductImagesProps) => {
         if (file) {
             for (const f of file) {
                 if (!allowedFileType.includes(f.type)) {
-                    valid = 'Please upload a .jpeg or .png file!'
+                    valid =
+                        'Please upload a .jpeg or .png  or gif or svg or jpg!'
                 }
 
                 if (f.size >= maxFileSize) {
-                    valid = 'Upload image cannot more then 5000kb!'
+                    valid = 'Upload image cannot more then 50000kb!'
                 }
             }
         }
@@ -155,6 +157,7 @@ const PackageImages = (props: ProductImagesProps) => {
         files: File[]
     ) => {
         let imageId = '1-img-0'
+
         const latestUpload = files.length - 1
         if (values.imgList.length > 0) {
             const prevImgId = values.imgList[values.imgList.length - 1].id
@@ -170,8 +173,8 @@ const PackageImages = (props: ProductImagesProps) => {
             img: URL.createObjectURL(files[latestUpload]),
         }
         const imageList = [...values.imgList, ...[image]]
-        console.log('imageList', imageList)
         form.setFieldValue(field.name, imageList)
+        form.setFieldValue('images', [...values.images, files])
     }
 
     const handleImageDelete = (
@@ -181,17 +184,37 @@ const PackageImages = (props: ProductImagesProps) => {
     ) => {
         let imgList = cloneDeep(values.imgList)
         imgList = imgList.filter((img) => img.id !== deletedImg.id)
+
+        // Find the index of the deleted image in the images array
+        const deletedImageIndex = values.imgList.findIndex(
+            (img) => img.id === deletedImg.id
+        )
+
+        if (deletedImageIndex !== -1) {
+            // Remove the deleted image file from the images array
+            const updatedImages = [...values.images]
+            updatedImages.splice(deletedImageIndex, 1)
+            form.setFieldValue(field.name, imgList)
+            form.setFieldValue('images', updatedImages)
+        }
+        // // Create a new images array without the deleted image
+        // const updatedImages = [
+        //     ...values.images.slice(0, deletedImageIndex),
+        //     ...values.images.slice(deletedImageIndex + 1),
+        // ]
+
         form.setFieldValue(field.name, imgList)
+        // form.setFieldValue('images', updatedImages)
     }
 
     return (
         <AdaptableCard className="mb-4">
-            <h5>Product Image</h5>
-            <p className="mb-6">Add or change image for the product</p>
+            <h5>Package Images</h5>
+            <p className="mb-6">Add or change images for the package</p>
             <FormItem>
                 <Field name="imgList">
                     {({ field, form }: FieldProps) => {
-                        if (values.imgList.length > 0) {
+                        if (values?.imgList?.length > 0) {
                             return (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                                     <ImageList
@@ -224,33 +247,38 @@ const PackageImages = (props: ProductImagesProps) => {
                         }
 
                         return (
-                            <Upload
-                                draggable
-                                beforeUpload={beforeUpload}
-                                showList={false}
-                                onChange={(files) =>
-                                    onUpload(form, field, files)
-                                }
-                            >
-                                <div className="my-16 text-center">
-                                    <DoubleSidedImage
-                                        className="mx-auto"
-                                        src="/img/others/upload.png"
-                                        darkModeSrc="/img/others/upload-dark.png"
-                                    />
-                                    <p className="font-semibold">
-                                        <span className="text-gray-800 dark:text-white">
-                                            Drop your image here, or{' '}
-                                        </span>
-                                        <span className="text-blue-500">
-                                            browse
-                                        </span>
-                                    </p>
-                                    <p className="mt-1 opacity-60 dark:text-white">
-                                        Support: jpeg, png
-                                    </p>
-                                </div>
-                            </Upload>
+                            <>
+                                <Upload
+                                    draggable
+                                    beforeUpload={beforeUpload}
+                                    showList={false}
+                                    onChange={(files) =>
+                                        onUpload(form, field, files)
+                                    }
+                                >
+                                    <div className="my-16 text-center">
+                                        <DoubleSidedImage
+                                            className="mx-auto"
+                                            src="/img/others/upload.png"
+                                            darkModeSrc="/img/others/upload-dark.png"
+                                        />
+                                        <p className="font-semibold">
+                                            <span className="text-gray-800 dark:text-white">
+                                                Drop your image here, or{' '}
+                                            </span>
+                                            <span className="text-blue-500">
+                                                browse
+                                            </span>
+                                        </p>
+                                    </div>
+                                </Upload>
+                                {form.errors.imgList &&
+                                    form.touched.imgList && (
+                                        <div className="text-red-500">
+                                            {form.errors.imgList}
+                                        </div>
+                                    )}
+                            </>
                         )
                     }}
                 </Field>

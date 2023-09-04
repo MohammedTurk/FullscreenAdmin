@@ -33,7 +33,7 @@ const ActionColumn = ({ row }: { row: PackageItem }) => {
     const navigate = useNavigate()
 
     const onView = () => {
-        // navigate(`/view-package-details/${row.job._id}`)
+        navigate(`/view-package-details/${row._id}`)
     }
 
     return (

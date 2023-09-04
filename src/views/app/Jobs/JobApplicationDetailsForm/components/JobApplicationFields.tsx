@@ -23,7 +23,7 @@ type JobFields = {
 
 const JobApplicationFields = (props: JobFields) => {
     const { values, touched, errors } = props
-    // console.log('values', values)
+
     return (
         <AdaptableCard divider className="mb-4">
             <h5 className="mb-6">Job Application Details</h5>

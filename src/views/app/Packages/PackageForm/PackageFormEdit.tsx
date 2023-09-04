@@ -12,33 +12,20 @@ import PackageFields from './PackageFields'
 import JobFile from './JobFile'
 import PackageImages from './PackageImages'
 import ParentPackageImages from './ParentPackageImages'
+import PackageEditFields from './PackageEditFields'
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
 
 type InitialData = {
-    arabicName?: string
-    englishName?: string
-    price?: string
-    arabicType?: string
-    englishType?: string
-    arabicServiceNames?: string[]
-    englishServiceNames?: string[]
-    arabicItems?: string[]
-    englishItems?: string[]
-    arabicDetails?: string
-    englishDetails?: string
-    isDefault?: boolean
-    img?: []
-    imgList?: {
-        id: string
-        name: string
-        img: string
-    }[]
-    images?: []
-    parentImgList?: []
-    parentImage: string
-}
+    name: string
+    price: number
+    details: string
+    items: string[]
+    services: { image: string; name: string }[]
+    type: string
+    isDefault: string
+}[]
 
 export type FormModel = Omit<InitialData, 'tags'> & {
     tags: { label: string; value: string }[] | string[]
@@ -52,35 +39,18 @@ type OnDelete = (callback: OnDeleteCallback) => void
 
 type PackageForm = {
     initialData?: InitialData
-    type: 'edit' | 'new'
     onDiscard?: () => void
     onDelete?: OnDelete
     onFormSubmit: (formData: any, setSubmitting: SetSubmitting) => void
 }
 
 const validationSchema = Yup.object().shape({
-    arabicName: Yup.string().required('Arabic Name is Required'),
-    englishName: Yup.string().required('English Name is Required'),
-    arabicType: Yup.string().required('Arabic Type is Required'),
-    englishType: Yup.string().required('English Type is Required'),
-
-    arabicDetails: Yup.string().required('Arabic Details is Required'),
-    englishDetails: Yup.string().required('English Details is Required'),
+    name: Yup.string().required('Name is Required'),
     price: Yup.number().required('Price is Required'),
-    imgList: Yup.array().min(1, 'At least one image is required'),
-    arabicServiceNames: Yup.array().of(
-        Yup.string().required('Arabic Service Name is Required')
-    ),
-    englishServiceNames: Yup.array().of(
-        Yup.string().required('English Service Name is Required')
-    ),
-    arabicItems: Yup.array().of(
-        Yup.string().required('Arabic Item Name is Required')
-    ),
-    englishItems: Yup.array().of(
-        Yup.string().required('English Item Name is Required')
-    ),
-    parentImage: Yup.mixed().required('Image is Required'),
+    details: Yup.string().required('Details is Required'),
+    services: Yup.array().of(Yup.string().required('Service Name is Required')),
+    items: Yup.array().of(Yup.string().required('Item Name is Required')),
+    type: Yup.string().required('Type is Required'),
 })
 
 const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
@@ -126,28 +96,19 @@ const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
     )
 }
 
-const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
+const PackageFormEdit = forwardRef<FormikRef, PackageForm>((props, ref) => {
     const {
-        type,
-        initialData = {
-            arabicName: '',
-            englishName: '',
-            price: '',
-            arabicType: '',
-            englishType: '',
-            arabicServiceNames: [''],
-            englishServiceNames: [''],
-            arabicItems: [''],
-            englishItems: [''],
-            arabicDetails: '',
-            englishDetails: '',
-            isDefault: false,
-            img: '',
-            imgList: [],
-            images: [],
-            parentImgList: [],
-            parentImage: '',
-        },
+        initialData = [
+            {
+                name: '',
+                price: 0,
+                details: '',
+                items: [''],
+                services: [],
+                type: '',
+                isDefault: '',
+            },
+        ],
         onFormSubmit,
         onDiscard,
         onDelete,
@@ -158,32 +119,32 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
             <Formik
                 innerRef={ref}
                 initialValues={{
-                    ...initialData,
+                    ...initialData[0],
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     const data = cloneDeep(values)
 
                     const formData = new FormData()
-                    formData.append('icon', data.parentImage)
-                    formData.append('name[ar]', data.arabicName)
-                    formData.append('name[en]', data.englishName)
-                    formData.append('price', data.price)
-                    formData.append('type[ar]', data.arabicType)
-                    formData.append('type[en]', data.englishType)
-                    formData.append('serviceNames[ar]', data.arabicServiceNames)
-                    formData.append(
-                        'serviceNames[en]',
-                        data.englishServiceNames
-                    )
-                    formData.append('items[ar]', data.arabicItems)
-                    formData.append('items[en]', data.englishItems)
-                    formData.append('details[ar]', data.arabicDetails)
-                    formData.append('details[en]', data.englishDetails)
-                    formData.append('images', data.images)
-                    formData.append('isDefault', data.isDefault)
+                    // formData.append('icon', data.parentImage)
+                    // formData.append('name[ar]', data.arabicName)
+                    // formData.append('name[en]', data.englishName)
+                    // formData.append('price', data.price)
+                    // formData.append('type[ar]', data.arabicType)
+                    // formData.append('type[en]', data.englishType)
+                    // formData.append('serviceNames[ar]', data.arabicServiceNames)
+                    // formData.append(
+                    //     'serviceNames[en]',
+                    //     data.englishServiceNames
+                    // )
+                    // formData.append('items[ar]', data.arabicItems)
+                    // formData.append('items[en]', data.englishItems)
+                    // formData.append('details[ar]', data.arabicDetails)
+                    // formData.append('details[en]', data.englishDetails)
+                    // formData.append('images', data.images)
+                    // formData.append('isDefault', data.isDefault)
 
-                    onFormSubmit?.(formData, setSubmitting)
+                    // onFormSubmit?.(formData, setSubmitting)
                 }}
             >
                 {({ values, touched, errors, isSubmitting }) => (
@@ -191,21 +152,11 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                         <FormContainer>
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                 <div className="lg:col-span-2">
-                                    <PackageFields
+                                    <PackageEditFields
                                         touched={touched}
                                         errors={errors}
                                         values={values}
                                     />
-                                </div>
-                                <div className="lg:col-span-1">
-                                    <PackageImages values={values} />
-                                    <div className="mt-5">
-                                        <ParentPackageImages
-                                            values={values}
-                                            errors={errors}
-                                            touched={touched}
-                                        />
-                                    </div>
                                 </div>
                             </div>
                             <StickyFooter
@@ -213,11 +164,9 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                                 stickyClass="border-t bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
                             >
                                 <div>
-                                    {type === 'edit' && (
-                                        <DeleteServiceButton
-                                            onDelete={onDelete as OnDelete}
-                                        />
-                                    )}
+                                    <DeleteServiceButton
+                                        onDelete={onDelete as OnDelete}
+                                    />
                                 </div>
                                 <div className="md:flex items-center">
                                     <Button
@@ -247,6 +196,6 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
     )
 })
 
-PackageForm.displayName = 'PackageForm'
+PackageFormEdit.displayName = 'PackageFormEdit'
 
-export default PackageForm
+export default PackageFormEdit
