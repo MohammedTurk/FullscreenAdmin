@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { TableQueries } from '@/@types/common'
 import {
+    apiDeletePackage,
     apiGetAllPackages,
     apiGetPackageDetails,
     apiGetPackageItems,
@@ -8,11 +9,14 @@ import {
 
 export type PackageItemsState = {
     loading: boolean
-    selectedPackage: string
+    selectedPackage: {
+        _id: string
+    }
     tableData: TableQueries
     packageItemsData: any
     loadingPackageDetails: boolean
     packageDetailsData: any
+    packageDeleteConfirmation: boolean
 }
 
 export const SLICE_NAME = 'PackageSlice'
@@ -34,6 +38,11 @@ export const getPackageDetails = createAsyncThunk(
     }
 )
 
+export const deletePackage = async (data: { _id: string | string[] }) => {
+    const response = await apiDeletePackage(data)
+    return response.data
+}
+
 // export const getSingleJopApplicationDetails = createAsyncThunk(
 //     SLICE_NAME + '/getSingleJopApplicationDetails',
 //     async (rquestParam: any) => {
@@ -51,11 +60,12 @@ export const initialTableData: TableQueries = {
 
 const initialState: PackageItemsState = {
     loading: false,
-    selectedPackage: '',
+    selectedPackage: { _id: '' },
     packageItemsData: [],
     tableData: initialTableData,
     loadingPackageDetails: false,
     packageDetailsData: [],
+    packageDeleteConfirmation: false,
 }
 
 const PackageSlice = createSlice({
@@ -68,6 +78,9 @@ const PackageSlice = createSlice({
 
         setSelectedPackage: (state, action) => {
             state.selectedPackage = action.payload
+        },
+        togglePackageDeleteConfirmation: (state, action) => {
+            state.packageDeleteConfirmation = action.payload
         },
     },
     extraReducers: (builder) => {
@@ -91,6 +104,10 @@ const PackageSlice = createSlice({
     },
 })
 
-export const { setTableData, setSelectedPackage } = PackageSlice.actions
+export const {
+    setTableData,
+    setSelectedPackage,
+    togglePackageDeleteConfirmation,
+} = PackageSlice.actions
 
 export default PackageSlice.reducer

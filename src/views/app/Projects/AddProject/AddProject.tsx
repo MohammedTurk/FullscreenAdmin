@@ -1,18 +1,19 @@
 import toast from '@/components/ui/toast'
 import Notification from '@/components/ui/Notification'
 import { useNavigate } from 'react-router-dom'
-import PackageForm, {
+import { apiAddNewService } from '@/services/ServicesList'
+
+import { apiAddNewProject } from '@/services/ProjectsList'
+import ProjectForm, {
     FormModel,
     SetSubmitting,
-} from '../PackageForm/PackageForm'
-import { apiAddNewPackage } from '@/services/PackagesList'
-import ParentPackageForm from '../PackageForm/ParentPackageForm'
+} from '../ProjectForm/ProjectForm'
 
-const AddParentPackage = () => {
+const AddProject = () => {
     const navigate = useNavigate()
 
-    const AddPackage = async (data: FormModel) => {
-        const response = await apiAddNewPackage(data)
+    const addProject = async (data: FormModel) => {
+        const response = await apiAddNewProject(data)
         return response.data
     }
 
@@ -22,7 +23,7 @@ const AddParentPackage = () => {
     ) => {
         setSubmitting(true)
         try {
-            const success = await AddPackage(values)
+            const success = await addProject(values)
             setSubmitting(false)
             if (success) {
                 toast.push(
@@ -31,13 +32,13 @@ const AddParentPackage = () => {
                         type="success"
                         duration={2500}
                     >
-                        Package successfuly added
+                        Project successfuly added
                     </Notification>,
                     {
                         placement: 'top-center',
                     }
                 )
-                navigate('/allPackages')
+                navigate('/allProjects')
             }
         } catch (error) {
             toast.push(
@@ -55,12 +56,12 @@ const AddParentPackage = () => {
     }
 
     const handleDiscard = () => {
-        navigate('/allPackages')
+        navigate('/allProjects')
     }
 
     return (
         <>
-            <ParentPackageForm
+            <ProjectForm
                 type="new"
                 onFormSubmit={handleFormSubmit}
                 onDiscard={handleDiscard}
@@ -69,4 +70,4 @@ const AddParentPackage = () => {
     )
 }
 
-export default AddParentPackage
+export default AddProject

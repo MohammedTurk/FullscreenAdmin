@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useRef } from 'react'
 import DataTable from '@/components/shared/DataTable'
-import { HiEye, HiPlusCircle } from 'react-icons/hi'
+import { HiEye, HiOutlineTrash, HiPlusCircle } from 'react-icons/hi'
 import {
     setTableData,
     useAppDispatch,
     useAppSelector,
     getPackageItems,
+    setSelectedPackage,
+    togglePackageDeleteConfirmation,
+    deletePackage,
 } from '../store'
 import useThemeClass from '@/utils/hooks/useThemeClass'
 import { useNavigate } from 'react-router-dom'
@@ -14,8 +17,13 @@ import type {
     DataTableResetHandle,
     ColumnDef,
 } from '@/components/shared/DataTable'
-import { AdaptableCard, Container, DoubleSidedImage } from '@/components/shared'
-import { Button } from '@/components/ui'
+import {
+    AdaptableCard,
+    ConfirmDialog,
+    Container,
+    DoubleSidedImage,
+} from '@/components/shared'
+import { Button, Notification, toast } from '@/components/ui'
 
 type PackageItem = {
     _id: string
@@ -36,7 +44,10 @@ const ActionColumn = ({ row }: { row: PackageItem }) => {
     const onView = () => {
         navigate(`/view-package-details/${row._id}`)
     }
-
+    const onPackageDelete = (_id: string) => {
+        dispatch(setSelectedPackage({ _id }))
+        dispatch(togglePackageDeleteConfirmation(true))
+    }
     return (
         <div className="flex justify-end text-lg">
             <span
@@ -44,6 +55,12 @@ const ActionColumn = ({ row }: { row: PackageItem }) => {
                 onClick={onView}
             >
                 <HiEye />
+            </span>
+            <span
+                className={`cursor-pointer p-2 hover:${textTheme}`}
+                onClick={() => onPackageDelete(row._id)}
+            >
+                <HiOutlineTrash />
             </span>
         </div>
     )
@@ -53,7 +70,17 @@ const PackageItemsTable = () => {
     const tableRef = useRef<DataTableResetHandle>(null)
     const dispatch = useAppDispatch()
     const data = useAppSelector((state) => state.PackageSlice.data)
+    const packageDeleteConfirmation = useAppSelector(
+        (state) => state.PackageSlice?.data?.packageDeleteConfirmation
+    )
+    console.log(
+        'packageDeleteConfirmation',
+        useAppSelector((state) => state.PackageSlice?.data)
+    )
 
+    const selectedPackage = useAppSelector(
+        (state) => state.PackageSlice?.data?.selectedPackage
+    )
     const { pageIndex, pageSize, total } = useAppSelector(
         (state) => state.PackageSlice.data.tableData
     )
@@ -173,6 +200,37 @@ const PackageItemsTable = () => {
 
         navigate(`/add-package/${path}`)
     }
+
+    const onPackageDeleteConfirm = async () => {
+        const success = await deletePackage({
+            _id: selectedPackage._id,
+        })
+        if (success) {
+            dispatch(togglePackageDeleteConfirmation(false))
+            const path = location.pathname.substring(
+                location.pathname.lastIndexOf('/') + 1
+            )
+
+            const rquestParam: any = { _id: path }
+            dispatch(getPackageItems(rquestParam))
+            toast.push(
+                <Notification
+                    title={'Successfuly Deleted'}
+                    type="success"
+                    duration={2500}
+                >
+                    Package successfuly deleted
+                </Notification>,
+                {
+                    placement: 'top-center',
+                }
+            )
+        }
+    }
+
+    const onPackageDeleteConfirmationClose = () => {
+        dispatch(togglePackageDeleteConfirmation(false))
+    }
     return (
         <>
             <div className="lg:flex items-center justify-right mb-4">
@@ -217,6 +275,21 @@ const PackageItemsTable = () => {
                         onPaginationChange={onPaginationChange}
                         onSelectChange={onSelectChange}
                     />
+                    <ConfirmDialog
+                        isOpen={packageDeleteConfirmation}
+                        type="danger"
+                        title="Delete Package"
+                        confirmButtonColor="red-600"
+                        onClose={onPackageDeleteConfirmationClose}
+                        onRequestClose={onPackageDeleteConfirmationClose}
+                        onCancel={onPackageDeleteConfirmationClose}
+                        onConfirm={onPackageDeleteConfirm}
+                    >
+                        <p>
+                            Are you sure you want to delete this package? This
+                            action cannot be undone.
+                        </p>
+                    </ConfirmDialog>
                 </>
             )}
         </>

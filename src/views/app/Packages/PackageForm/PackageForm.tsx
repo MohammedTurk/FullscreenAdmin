@@ -153,32 +153,7 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
         onDiscard,
         onDelete,
     } = props
-    function createFileList(data) {
-        const fileList = []
 
-        // Iterate through the data array
-        for (let i = 0; i < data.length; i++) {
-            const fileArray = data[i]
-
-            // Check if the element is an array and has at least one item
-            if (Array.isArray(fileArray) && fileArray.length > 0) {
-                const file = fileArray[0]
-
-                // Check if the item is a File object
-                if (file instanceof File) {
-                    fileList.push(file)
-                }
-            }
-        }
-
-        // Create a DataTransfer object and set its files property
-        const dataTransfer = new DataTransfer()
-        fileList.forEach((file) => {
-            dataTransfer.items.add(file)
-        })
-
-        return dataTransfer.files
-    }
     return (
         <>
             <Formik
@@ -194,30 +169,39 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                     )
 
                     const formData = new FormData()
-                    // formData.append('icon', data.parentImage)
                     formData.append('parentId', path)
                     formData.append('name[ar]', data.arabicName)
                     formData.append('name[en]', data.englishName)
                     formData.append('price', data.price)
                     formData.append('type[ar]', data.arabicType)
                     formData.append('type[en]', data.englishType)
-                    data.arabicServiceNames.forEach((service: any, index) => {
-                        formData.append(`serviceNames[${index}][ar]`, service)
-                    })
-                    data.englishServiceNames.forEach((service: any, index) => {
-                        formData.append(`serviceNames[${index}][en]`, service)
-                    })
+                    data.arabicServiceNames.forEach(
+                        (service: any, index: number) => {
+                            formData.append(
+                                `serviceNames[${index}][ar]`,
+                                service
+                            )
+                        }
+                    )
+                    data.englishServiceNames.forEach(
+                        (service: any, index: number) => {
+                            formData.append(
+                                `serviceNames[${index}][en]`,
+                                service
+                            )
+                        }
+                    )
 
-                    data.arabicItems.forEach((item: any, index) => {
+                    data.arabicItems.forEach((item: any, index: number) => {
                         formData.append(`items[${index}][ar]`, item)
                     })
-                    data.englishItems.forEach((item: any, index) => {
+                    data.englishItems.forEach((item: any, index: number) => {
                         formData.append(`items[${index}][en]`, item)
                     })
 
                     formData.append('details[ar]', data.arabicDetails)
                     formData.append('details[en]', data.englishDetails)
-                    data.images.forEach((image: any, index) => {
+                    data.images.forEach((image: any, index: number) => {
                         formData.append(`images`, ...image)
                     })
 

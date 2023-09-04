@@ -192,6 +192,48 @@ const navigationConfig: NavigationTree[] = [
             // },
         ],
     },
+
+    {
+        key: 'projects',
+        path: '',
+        title: 'Projects Menu',
+        translateKey: 'nav.projects.projects',
+        icon: 'projects',
+        type: NAV_ITEM_TYPE_COLLAPSE,
+        authority: [],
+        subMenu: [
+            {
+                key: 'projects.allProjects',
+                path: '/allProjects',
+                title: 'All Projects',
+                translateKey: 'nav.projects.allProjects',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
+            {
+                key: 'projects.addProject',
+                path: '/add-project',
+                title: 'Add Project',
+                translateKey: 'nav.projects.addProject',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
+            // {
+            //     key: 'jobs.allJobApplications',
+            //     path: '/job-applications',
+            //     title: 'All Job Applications',
+            //     translateKey: 'nav.jobs.allJobApplications',
+            //     icon: '',
+            //     type: NAV_ITEM_TYPE_ITEM,
+            //     authority: [],
+            //     subMenu: [],
+            // },
+        ],
+    },
 ]
 
 export default navigationConfig

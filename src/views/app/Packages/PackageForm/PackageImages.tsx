@@ -129,11 +129,11 @@ const PackageImages = (props: ProductImagesProps) => {
         const allowedFileType = [
             'image/jpeg',
             'image/png',
-            'image/gif',
             'image/svg',
             'image/jpg',
+            'image/gif',
         ]
-        const maxFileSize = 5000000
+        const maxFileSize = 3000000
 
         if (file) {
             for (const f of file) {
@@ -143,7 +143,7 @@ const PackageImages = (props: ProductImagesProps) => {
                 }
 
                 if (f.size >= maxFileSize) {
-                    valid = 'Upload image cannot more then 50000kb!'
+                    valid = 'Upload image cannot more then 3MB!'
                 }
             }
         }

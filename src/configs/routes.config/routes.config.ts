@@ -157,14 +157,16 @@ export const protectedRoutes = [
     {
         key: 'packages.addPackageParent',
         path: '/add-package',
-        component: lazy(() => import('@/views/app/Packages/AddPackage')),
+        component: lazy(
+            () => import('@/views/app/Packages/AddPackage/AddParentPackage')
+        ),
         authority: [],
     },
     {
         key: 'packages.addPackage',
         path: '/add-package/:id',
         component: lazy(
-            () => import('@/views/app/Packages/AddPackage/AddParentPackage')
+            () => import('@/views/app/Packages/AddPackage/AddPackage')
         ),
         authority: [],
     },
@@ -181,6 +183,19 @@ export const protectedRoutes = [
         component: lazy(
             () => import('@/views/app/Packages/PackageItemsList/PackageDetails')
         ),
+        authority: [],
+    },
+
+    {
+        key: 'projects.allProjects',
+        path: '/allProjects',
+        component: lazy(() => import('@/views/app/Projects/ProjectsList')),
+        authority: [],
+    },
+    {
+        key: 'projects.addProject',
+        path: '/add-Project',
+        component: lazy(() => import('@/views/app/Projects/AddProject')),
         authority: [],
     },
 ]

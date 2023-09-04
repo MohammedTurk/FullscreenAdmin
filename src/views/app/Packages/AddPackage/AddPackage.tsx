@@ -37,7 +37,7 @@ const AddPackage = () => {
                         placement: 'top-center',
                     }
                 )
-                navigate('/allPackages')
+                navigate(-1)
             }
         } catch (error) {
             toast.push(
@@ -55,12 +55,12 @@ const AddPackage = () => {
     }
 
     const handleDiscard = () => {
-        navigate('/allPackages')
+        navigate(-1)
     }
 
     return (
         <>
-            <ParentPackageForm
+            <PackageForm
                 type="new"
                 onFormSubmit={handleFormSubmit}
                 onDiscard={handleDiscard}
