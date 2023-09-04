@@ -73,8 +73,8 @@ const ImageList = (props: ImageListProps) => {
                 >
                     <img
                         className="rounded max-h-[140px] max-w-full"
-                        src={img.img}
-                        alt={img.name}
+                        src={img.img || img}
+                        alt={img.name || 'image'}
                     />
                     <div className="absolute inset-2 bg-gray-900/[.7] group-hover:flex hidden text-xl items-center justify-center">
                         <span
@@ -100,7 +100,7 @@ const ImageList = (props: ImageListProps) => {
                 <h5 className="mb-4">{selectedImg.name}</h5>
                 <img
                     className="w-full"
-                    src={selectedImg.img}
+                    src={selectedImg.img || selectedImg}
                     alt={selectedImg.name}
                 />
             </Dialog>
@@ -151,6 +151,32 @@ const PackageImages = (props: ProductImagesProps) => {
         return valid
     }
 
+    // const onUpload = (
+    //     form: FormikProps<FormModel>,
+    //     field: FieldInputProps<FormModel>,
+    //     files: File[]
+    // ) => {
+    //     let imageId = '1-img-0'
+
+    //     const latestUpload = files.length - 1
+
+    //     if (values.imgList.length > 0) {
+    //         const prevImgId = values.imgList[values.imgList.length - 1].id
+    //         const splitImgId = prevImgId.split('-')
+    //         const newIdNumber = parseInt(splitImgId[splitImgId.length - 1]) + 1
+    //         splitImgId.pop()
+    //         const newIdArr = [...splitImgId, ...[newIdNumber]]
+    //         imageId = newIdArr.join('-')
+    //     }
+    //     const image = {
+    //         id: imageId,
+    //         name: files[latestUpload].name,
+    //         img: URL.createObjectURL(files[latestUpload]),
+    //     }
+    //     const imageList = [...values.imgList, ...[image]]
+    //     form.setFieldValue(field.name, imageList)
+    //     form.setFieldValue('images', [...values.images, files])
+    // }
     const onUpload = (
         form: FormikProps<FormModel>,
         field: FieldInputProps<FormModel>,
@@ -159,22 +185,31 @@ const PackageImages = (props: ProductImagesProps) => {
         let imageId = '1-img-0'
 
         const latestUpload = files.length - 1
+
         if (values.imgList.length > 0) {
-            const prevImgId = values.imgList[values.imgList.length - 1].id
-            const splitImgId = prevImgId.split('-')
-            const newIdNumber = parseInt(splitImgId[splitImgId.length - 1]) + 1
-            splitImgId.pop()
-            const newIdArr = [...splitImgId, ...[newIdNumber]]
-            imageId = newIdArr.join('-')
+            const lastImage = values.imgList[values.imgList.length - 1]
+            if (lastImage && lastImage.id) {
+                const prevImgId = lastImage.id
+                const splitImgId = prevImgId.split('-')
+                const newIdNumber =
+                    parseInt(splitImgId[splitImgId.length - 1]) + 1
+                splitImgId.pop()
+                const newIdArr = [...splitImgId, ...[newIdNumber]]
+                imageId = newIdArr.join('-')
+            }
         }
+
         const image = {
             id: imageId,
             name: files[latestUpload].name,
             img: URL.createObjectURL(files[latestUpload]),
         }
+
         const imageList = [...values.imgList, ...[image]]
+
         form.setFieldValue(field.name, imageList)
         form.setFieldValue('images', [...values.images, files])
+        console.log('images', [...values.images, files])
     }
 
     const handleImageDelete = (

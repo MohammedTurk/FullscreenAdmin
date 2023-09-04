@@ -28,8 +28,10 @@ const ParentPackageFields = (props: PackageFields) => {
 
     return (
         <AdaptableCard divider className="mb-4">
-            <h5>Package Information</h5>
-            <p className="mb-6">Section to config basic package information</p>
+            <h5>Parent Package Information</h5>
+            <p className="mb-6">
+                Section to config basic parent package information
+            </p>
             <FormItem
                 label="Arabic Name  "
                 invalid={(errors.arabicName && touched.arabicName) as boolean}

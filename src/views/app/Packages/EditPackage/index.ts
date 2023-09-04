@@ -1,3 +1,3 @@
-import EditPackage from './EditPackage'
+import EditParentPackage from './EditParentPackage'
 
-export default EditPackage
+export default EditParentPackage

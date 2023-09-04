@@ -177,6 +177,15 @@ export const protectedRoutes = [
         component: lazy(() => import('@/views/app/Packages/EditPackage')),
         authority: [],
     },
+
+    {
+        key: 'packages.editSubPackage',
+        path: '/edit-sub-package/:id',
+        component: lazy(
+            () => import('@/views/app/Packages/EditPackage/EditPackage')
+        ),
+        authority: [],
+    },
     {
         key: 'packages.packageDetails',
         path: '/view-package-details/:id',
@@ -202,6 +211,12 @@ export const protectedRoutes = [
         key: 'projects.editProject',
         path: '/edit-Project/:id',
         component: lazy(() => import('@/views/app/Projects/ProjectEdit')),
+        authority: [],
+    },
+    {
+        key: 'contactUs.allRequests',
+        path: '/allRequests',
+        component: lazy(() => import('@/views/app/Contactus/ContactusList')),
         authority: [],
     },
 ]

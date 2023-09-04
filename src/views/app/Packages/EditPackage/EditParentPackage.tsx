@@ -24,7 +24,7 @@ import ParentPackageForm from '../PackageForm/ParentPackageForm'
 
 injectReducer('packageEditSlice', reducer)
 
-export const EditPackage = () => {
+export const EditParentPackage = () => {
     const dispatch = useAppDispatch()
 
     const location = useLocation()
@@ -33,38 +33,12 @@ export const EditPackage = () => {
     const PackageData = useAppSelector(
         (state) => state.packageEditSlice.data.PackageData.data
     )
+    console.log('PackageData', PackageData)
 
     const data: any = {}
     if (PackageData) {
         data.arabicName = PackageData?.name?.ar
         data.englishName = PackageData?.name?.en
-        data.isDefault = PackageData?.isDefault
-        data.arabicType = PackageData?.type?.ar
-        data.englishType = PackageData?.type?.en
-        const itemsAr: any = []
-        const itemsEn: any = []
-        PackageData?.items.forEach((item: any) => {
-            itemsAr.push(item?.ar)
-            itemsEn.push(item?.en)
-        })
-        data.arabicItems = itemsAr
-        data.englishItems = itemsEn
-        data.arabicDetails = PackageData?.details?.ar
-        data.englishDetails = PackageData?.details?.en
-
-        const ServicesNameAr: any = []
-        const ServicesNameEn: any = []
-        const ServicesImages: any = []
-        PackageData?.services.forEach((item: any) => {
-            ServicesNameAr.push(item?.name?.ar)
-            ServicesNameEn.push(item?.name?.en)
-            ServicesImages.push(item?.image)
-        })
-        data.arabicServiceNames = ServicesNameAr
-        data.englishServiceNames = ServicesNameEn
-        data.images = ServicesImages
-        data.imgList = ServicesImages
-        data.price = PackageData?.price
         data.parentImage = PackageData?.icon
     }
 
@@ -90,7 +64,7 @@ export const EditPackage = () => {
     }
 
     const handleDiscard = () => {
-        navigate(-1)
+        navigate('/allPackages')
     }
 
     const handleDelete = async (setDialogOpen: OnDeleteCallback) => {
@@ -116,7 +90,7 @@ export const EditPackage = () => {
                 placement: 'top-center',
             }
         )
-        navigate(-1)
+        navigate('/allPackages')
     }
 
     useEffect(() => {
@@ -133,7 +107,7 @@ export const EditPackage = () => {
         <>
             <Loading loading={loading}>
                 {!isEmpty(PackageData) && (
-                    <PackageForm
+                    <ParentPackageForm
                         type="edit"
                         initialData={data}
                         onFormSubmit={handleFormSubmit}
@@ -156,4 +130,4 @@ export const EditPackage = () => {
     )
 }
 
-export default EditPackage
+export default EditParentPackage

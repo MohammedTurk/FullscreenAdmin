@@ -23,20 +23,22 @@ type Image = {
 }
 
 type FormFieldsName = {
-    parentImgList: []
-    parentImage: string
+    name: string
+    productCode: string
+    description: string
+    image: string
 }
 
 type FormModel = {
-    parentImage: string
+    image: string
     [key: string]: any
-    parentImgList: any
+    imageList: any
 }
 
 type ImageListProps = {
-    parentImage: string
+    image: string
     onImageDelete: (image: string) => void
-    parentImgList: [
+    imageList: [
         {
             img: string
         }
@@ -50,7 +52,7 @@ type ServiceImagesProps = {
 }
 
 const ImageList = (props: ImageListProps) => {
-    const { parentImage, onImageDelete, parentImgList } = props
+    const { image, onImageDelete, imageList } = props
 
     const [selectedImg, setSelectedImg] = useState<string>('')
     const [viewOpen, setViewOpen] = useState(false)
@@ -83,8 +85,8 @@ const ImageList = (props: ImageListProps) => {
         setDeleteConfirmationOpen(false)
     }
     let imageData = ''
-    if (parentImgList !== undefined) {
-        imageData = parentImgList[0]?.img
+    if (imageList !== undefined) {
+        imageData = imageList[0]?.img
     }
 
     return (
@@ -92,19 +94,19 @@ const ImageList = (props: ImageListProps) => {
             <div className="group relative rounded border p-2 flex">
                 <img
                     className="rounded max-h-[140px] max-w-full"
-                    src={imageData || parentImage}
+                    src={imageData || image}
                     alt="image"
                 />
                 <div className="absolute inset-2 bg-gray-900/[.7] group-hover:flex hidden text-xl items-center justify-center">
                     <span
                         className="text-gray-100 hover:text-gray-300 cursor-pointer p-1.5"
-                        onClick={() => onViewOpen(parentImage)}
+                        onClick={() => onViewOpen(image)}
                     >
                         <HiEye />
                     </span>
                     <span
                         className="text-gray-100 hover:text-gray-300 cursor-pointer p-1.5"
-                        onClick={() => onDeleteConfirmation(parentImage)}
+                        onClick={() => onDeleteConfirmation(image)}
                     >
                         <HiTrash />
                     </span>
@@ -134,30 +136,23 @@ const ImageList = (props: ImageListProps) => {
     )
 }
 
-const ParentPackageImages = (props: ServiceImagesProps) => {
+const ServiceImages = (props: ServiceImagesProps) => {
     const { touched, errors, values } = props
 
     const beforeUpload = (file: FileList | null) => {
         let valid: boolean | string = true
 
-        const allowedFileType = [
-            'image/jpeg',
-            'image/png',
-            'image/gif',
-            'image/svg',
-            'image/jpg',
-        ]
-        const maxFileSize = 3000000
+        const allowedFileType = ['image/jpeg', 'image/png', 'image/svg']
+        const maxFileSize = 5000000
 
         if (file) {
             for (const f of file) {
                 if (!allowedFileType.includes(f.type)) {
-                    valid =
-                        'Please upload a .jpeg or .png  or gif or svg or jpg!'
+                    valid = 'Please upload a .jpeg or .png file!'
                 }
 
                 if (f.size >= maxFileSize) {
-                    valid = 'Upload image cannot more then 3MB!'
+                    valid = 'Upload image cannot more then 5000kb!'
                 }
             }
         }
@@ -180,42 +175,48 @@ const ParentPackageImages = (props: ServiceImagesProps) => {
             img: URL.createObjectURL(files[latestUpload]),
         }
 
-        const parentImgList = [image]
+        const imageList = [image]
 
-        form.setFieldValue('parentImgList', parentImgList)
-        form.setFieldValue('parentImage', files[0])
+        form.setFieldValue('imageList', imageList)
+        form.setFieldValue('image', files[0])
     }
 
     const handleImageDelete = (
         form: FormikProps<FormModel>,
-        field: FieldInputProps<FormModel>
+        field: FieldInputProps<FormModel>,
+        deletedImg: Image
     ) => {
-        form.setFieldValue('parentImgList', [])
-        form.setFieldValue('parentImage', '')
+        // let imgList = cloneDeep(values.imgList)
+        // imgList = imgList.filter((img) => img.id !== deletedImg.id)
+
+        form.setFieldValue(field.name, [])
+        form.setFieldValue('image', '')
     }
 
     return (
         <AdaptableCard className="mb-4">
-            <h5>Parent Package Image</h5>
-            <p className="mb-6">Add or change image for the parent Package</p>
+            <h5>Service Image</h5>
+            <p className="mb-6">Add or change image for the service</p>
             <FormItem
-                invalid={(errors.parentImage && touched.parentImage) as boolean}
-                errorMessage={errors.parentImage}
+                invalid={(errors.image && touched.image) as boolean}
+                errorMessage={errors.image}
             >
                 <Field name="image">
                     {({ field, form }: FieldProps) => {
-                        if (
-                            values.parentImgList?.length > 0 ||
-                            values.parentImage
-                        ) {
+                        if (values.imgList?.length > 0 || values.image) {
                             return (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                                     <ImageList
-                                        parentImage={values.parentImage}
+                                        image={values.image}
                                         onImageDelete={(image: string) =>
-                                            handleImageDelete(form, field)
+                                            handleImageDelete(
+                                                form,
+                                                field,
+                                                image,
+                                                values.imageList
+                                            )
                                         }
-                                        parentImgList={values.parentImgList}
+                                        imageList={values.imageList}
                                     />
                                     <Upload
                                         draggable
@@ -263,6 +264,9 @@ const ParentPackageImages = (props: ServiceImagesProps) => {
                                             browse
                                         </span>
                                     </p>
+                                    <p className="mt-1 opacity-60 dark:text-white">
+                                        Support: jpeg, png
+                                    </p>
                                 </div>
                             </Upload>
                         )
@@ -273,4 +277,4 @@ const ParentPackageImages = (props: ServiceImagesProps) => {
     )
 }
 
-export default ParentPackageImages
+export default ServiceImages

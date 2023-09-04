@@ -1,5 +1,6 @@
 import {
     apiDeletePackage,
+    apiGetAllPackageDetails,
     apiGetPackageData,
     apiGetPackageDetails,
     apiUpdatePackage,
@@ -17,7 +18,7 @@ export const SLICE_NAME = 'packageEditSlice'
 export const getPackage = createAsyncThunk(
     SLICE_NAME + '/getPackage',
     async (data: { _id: string }) => {
-        const response = await apiGetPackageData(data)
+        const response = await apiGetAllPackageDetails(data)
         return response.data
     }
 )

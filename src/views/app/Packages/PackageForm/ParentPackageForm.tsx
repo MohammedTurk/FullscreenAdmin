@@ -115,7 +115,6 @@ const ParentPackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
 
                     const formData = new FormData()
                     formData.append('icon', data.parentImage)
-
                     formData.append('name[ar]', data.arabicName)
                     formData.append('name[en]', data.englishName)
 

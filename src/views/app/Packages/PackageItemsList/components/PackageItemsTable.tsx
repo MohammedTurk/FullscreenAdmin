@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useRef } from 'react'
 import DataTable from '@/components/shared/DataTable'
-import { HiEye, HiOutlineTrash, HiPlusCircle } from 'react-icons/hi'
+import {
+    HiEye,
+    HiOutlinePencil,
+    HiOutlineTrash,
+    HiPlusCircle,
+} from 'react-icons/hi'
 import {
     setTableData,
     useAppDispatch,
@@ -44,12 +49,21 @@ const ActionColumn = ({ row }: { row: PackageItem }) => {
     const onView = () => {
         navigate(`/view-package-details/${row._id}`)
     }
+    const onEdit = () => {
+        navigate(`/edit-sub-package/${row._id}`)
+    }
     const onPackageDelete = (_id: string) => {
         dispatch(setSelectedPackage({ _id }))
         dispatch(togglePackageDeleteConfirmation(true))
     }
     return (
         <div className="flex justify-end text-lg">
+            <span
+                className={`cursor-pointer p-2 hover:${textTheme}`}
+                onClick={onEdit}
+            >
+                <HiOutlinePencil />
+            </span>
             <span
                 className={`cursor-pointer p-2 hover:${textTheme}`}
                 onClick={onView}
