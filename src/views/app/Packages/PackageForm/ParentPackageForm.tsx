@@ -43,6 +43,7 @@ type PackageForm = {
 const validationSchema = Yup.object().shape({
     arabicName: Yup.string().required('Arabic Name is Required'),
     englishName: Yup.string().required('English Name is Required'),
+    parentImage: Yup.mixed().required('Image is Required'),
 })
 
 const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
@@ -94,6 +95,7 @@ const ParentPackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
         initialData = {
             arabicName: '',
             englishName: '',
+            parentImage: '',
         },
         onFormSubmit,
         onDiscard,
@@ -110,32 +112,12 @@ const ParentPackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     const data = cloneDeep(values)
-                    const path = location.pathname.substring(
-                        location.pathname.lastIndexOf('/') + 1
-                    )
 
                     const formData = new FormData()
                     formData.append('icon', data.parentImage)
 
-                    // formData.append('parentId', path)
                     formData.append('name[ar]', data.arabicName)
                     formData.append('name[en]', data.englishName)
-                    // formData.append('price', data.price)
-                    // formData.append('type[ar]', data.arabicType)
-                    // formData.append('type[en]', data.englishType)
-                    // formData.append('serviceNames[ar]', data.arabicServiceNames)
-                    // formData.append(
-                    //     'serviceNames[en]',
-                    //     data.englishServiceNames
-                    // )
-                    // formData.append('items[ar]', data.arabicItems)
-                    // formData.append('items[en]', data.englishItems)
-                    // formData.append('details[ar]', data.arabicDetails)
-                    // formData.append('details[en]', data.englishDetails)
-                    // formData.append('images', data.images)
-
-                    // formData.append('isDefault', data.isDefault)
-                    // formData.append('isDefault', data.isDefault)
 
                     onFormSubmit?.(formData, setSubmitting)
                 }}
