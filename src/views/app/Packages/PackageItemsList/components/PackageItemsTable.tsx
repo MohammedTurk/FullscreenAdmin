@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import DataTable from '@/components/shared/DataTable'
-import { HiEye } from 'react-icons/hi'
+import { HiEye, HiPlusCircle } from 'react-icons/hi'
 import {
     setTableData,
     useAppDispatch,
@@ -14,7 +14,8 @@ import type {
     DataTableResetHandle,
     ColumnDef,
 } from '@/components/shared/DataTable'
-import { Container, DoubleSidedImage } from '@/components/shared'
+import { AdaptableCard, Container, DoubleSidedImage } from '@/components/shared'
+import { Button } from '@/components/ui'
 
 type PackageItem = {
     _id: string
@@ -163,7 +164,15 @@ const PackageItemsTable = () => {
         newTableData.pageIndex = 1
         dispatch(setTableData(newTableData))
     }
+    const navigate = useNavigate()
 
+    const addPackage = () => {
+        const path = location.pathname.substring(
+            location.pathname.lastIndexOf('/') + 1
+        )
+
+        navigate(`/add-package/${path}`)
+    }
     return (
         <>
             {!data?.loading && data?.packageItemsData.length == 0 ? (
@@ -180,21 +189,36 @@ const PackageItemsTable = () => {
                     </div>
                 </Container>
             ) : (
-                <DataTable
-                    ref={tableRef}
-                    columns={columns}
-                    data={data.packageItemsData}
-                    skeletonAvatarColumns={[0]}
-                    skeletonAvatarProps={{ className: 'rounded-md' }}
-                    loading={data.loading}
-                    pagingData={{
-                        total: tableData.total as number,
-                        pageIndex: tableData.pageIndex as number,
-                        pageSize: tableData.pageSize as number,
-                    }}
-                    onPaginationChange={onPaginationChange}
-                    onSelectChange={onSelectChange}
-                />
+                <>
+                    <div className="lg:flex items-center justify-right mb-4">
+                        <Button
+                            block
+                            variant="solid"
+                            size="sm"
+                            className="!w-[200px]"
+                            icon={<HiPlusCircle />}
+                            onClick={() => addPackage()}
+                        >
+                            Add Package
+                        </Button>
+                    </div>
+
+                    <DataTable
+                        ref={tableRef}
+                        columns={columns}
+                        data={data.packageItemsData}
+                        skeletonAvatarColumns={[0]}
+                        skeletonAvatarProps={{ className: 'rounded-md' }}
+                        loading={data.loading}
+                        pagingData={{
+                            total: tableData.total as number,
+                            pageIndex: tableData.pageIndex as number,
+                            pageSize: tableData.pageSize as number,
+                        }}
+                        onPaginationChange={onPaginationChange}
+                        onSelectChange={onSelectChange}
+                    />
+                </>
             )}
         </>
     )

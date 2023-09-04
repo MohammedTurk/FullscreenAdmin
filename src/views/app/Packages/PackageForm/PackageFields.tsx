@@ -136,7 +136,127 @@ const PackageFields = (props: PackageFields) => {
                     )}
                 </Field>
             </FormItem>
+            <FieldArray
+                name="arabicItems"
+                render={(arrayHelpers) => (
+                    <div className="mb-5">
+                        {values?.arabicItems?.map(
+                            (item: string, index: number) => (
+                                <div
+                                    key={index}
+                                    className="flex gap-3 items-center"
+                                >
+                                    <FormItem
+                                        label={`Arabic Item ${index + 1} Name`}
+                                        invalid={Boolean(
+                                            errors.arabicItems &&
+                                                errors.arabicItems[index] &&
+                                                touched.arabicItems &&
+                                                touched.arabicItems[index]
+                                        )}
+                                        errorMessage={
+                                            errors.arabicItems &&
+                                            errors.arabicItems[index]
+                                        }
+                                    >
+                                        <Field
+                                            type="text"
+                                            className="w-[300px]"
+                                            autoComplete="off"
+                                            name={`arabicItems.${index}`}
+                                            placeholder="Item Name"
+                                            component={Input}
+                                        />
+                                    </FormItem>
 
+                                    <Button
+                                        type="button"
+                                        variant="twoTone"
+                                        color="red-600"
+                                        size="sm"
+                                        icon={<HiMinusSm />}
+                                        onClick={() =>
+                                            arrayHelpers.remove(index)
+                                        } // remove a product from the list
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
+                            )
+                        )}
+                        <Button
+                            size="md"
+                            icon={<HiPlus />}
+                            type="button"
+                            variant="twoTone"
+                            onClick={() => arrayHelpers.push('')}
+                        >
+                            Add a new arabic item
+                        </Button>
+                    </div>
+                )}
+            />
+
+            <FieldArray
+                name="englishItems"
+                render={(arrayHelpers) => (
+                    <div className="mb-5">
+                        {values?.englishItems?.map(
+                            (item: string, index: number) => (
+                                <div
+                                    key={index}
+                                    className="flex gap-3 items-center"
+                                >
+                                    <FormItem
+                                        label={`English Item ${index + 1} Name`}
+                                        invalid={Boolean(
+                                            errors.englishItems &&
+                                                errors.englishItems[index] &&
+                                                touched.englishItems &&
+                                                touched.englishItems[index]
+                                        )}
+                                        errorMessage={
+                                            errors.englishItems &&
+                                            errors.englishItems[index]
+                                        }
+                                    >
+                                        <Field
+                                            type="text"
+                                            className="w-[300px]"
+                                            autoComplete="off"
+                                            name={`englishItems.${index}`}
+                                            placeholder="Item Name"
+                                            component={Input}
+                                        />
+                                    </FormItem>
+
+                                    <Button
+                                        type="button"
+                                        variant="twoTone"
+                                        color="red-600"
+                                        size="sm"
+                                        icon={<HiMinusSm />}
+                                        onClick={() =>
+                                            arrayHelpers.remove(index)
+                                        } // remove a product from the list
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
+                            )
+                        )}
+                        <Button
+                            size="md"
+                            icon={<HiPlus />}
+                            type="button"
+                            variant="twoTone"
+                            onClick={() => arrayHelpers.push('')}
+                        >
+                            Add a new english item
+                        </Button>
+                    </div>
+                )}
+            />
             <FormItem
                 label="Arabic Details"
                 labelClass="!justify-start"
@@ -306,128 +426,6 @@ const PackageFields = (props: PackageFields) => {
                             onClick={() => arrayHelpers.push('')}
                         >
                             Add a new english service
-                        </Button>
-                    </div>
-                )}
-            />
-
-            <FieldArray
-                name="arabicItems"
-                render={(arrayHelpers) => (
-                    <div className="mb-5">
-                        {values?.arabicItems?.map(
-                            (item: string, index: number) => (
-                                <div
-                                    key={index}
-                                    className="flex gap-3 items-center"
-                                >
-                                    <FormItem
-                                        label={`Arabic Item ${index + 1} Name`}
-                                        invalid={Boolean(
-                                            errors.arabicItems &&
-                                                errors.arabicItems[index] &&
-                                                touched.arabicItems &&
-                                                touched.arabicItems[index]
-                                        )}
-                                        errorMessage={
-                                            errors.arabicItems &&
-                                            errors.arabicItems[index]
-                                        }
-                                    >
-                                        <Field
-                                            type="text"
-                                            className="w-[300px]"
-                                            autoComplete="off"
-                                            name={`arabicItems.${index}`}
-                                            placeholder="Item Name"
-                                            component={Input}
-                                        />
-                                    </FormItem>
-
-                                    <Button
-                                        type="button"
-                                        variant="twoTone"
-                                        color="red-600"
-                                        size="sm"
-                                        icon={<HiMinusSm />}
-                                        onClick={() =>
-                                            arrayHelpers.remove(index)
-                                        } // remove a product from the list
-                                    >
-                                        Remove
-                                    </Button>
-                                </div>
-                            )
-                        )}
-                        <Button
-                            size="md"
-                            icon={<HiPlus />}
-                            type="button"
-                            variant="twoTone"
-                            onClick={() => arrayHelpers.push('')}
-                        >
-                            Add a new arabic item
-                        </Button>
-                    </div>
-                )}
-            />
-
-            <FieldArray
-                name="englishItems"
-                render={(arrayHelpers) => (
-                    <div className="mb-5">
-                        {values?.englishItems?.map(
-                            (item: string, index: number) => (
-                                <div
-                                    key={index}
-                                    className="flex gap-3 items-center"
-                                >
-                                    <FormItem
-                                        label={`English Item ${index + 1} Name`}
-                                        invalid={Boolean(
-                                            errors.englishItems &&
-                                                errors.englishItems[index] &&
-                                                touched.englishItems &&
-                                                touched.englishItems[index]
-                                        )}
-                                        errorMessage={
-                                            errors.englishItems &&
-                                            errors.englishItems[index]
-                                        }
-                                    >
-                                        <Field
-                                            type="text"
-                                            className="w-[300px]"
-                                            autoComplete="off"
-                                            name={`englishItems.${index}`}
-                                            placeholder="Item Name"
-                                            component={Input}
-                                        />
-                                    </FormItem>
-
-                                    <Button
-                                        type="button"
-                                        variant="twoTone"
-                                        color="red-600"
-                                        size="sm"
-                                        icon={<HiMinusSm />}
-                                        onClick={() =>
-                                            arrayHelpers.remove(index)
-                                        } // remove a product from the list
-                                    >
-                                        Remove
-                                    </Button>
-                                </div>
-                            )
-                        )}
-                        <Button
-                            size="md"
-                            icon={<HiPlus />}
-                            type="button"
-                            variant="twoTone"
-                            onClick={() => arrayHelpers.push('')}
-                        >
-                            Add a new english item
                         </Button>
                     </div>
                 )}

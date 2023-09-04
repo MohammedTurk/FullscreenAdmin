@@ -6,6 +6,7 @@ import PackageForm, {
     SetSubmitting,
 } from '../PackageForm/PackageForm'
 import { apiAddNewPackage } from '@/services/PackagesList'
+import ParentPackageForm from '../PackageForm/ParentPackageForm'
 
 const AddPackage = () => {
     const navigate = useNavigate()
@@ -59,7 +60,7 @@ const AddPackage = () => {
 
     return (
         <>
-            <PackageForm
+            <ParentPackageForm
                 type="new"
                 onFormSubmit={handleFormSubmit}
                 onDiscard={handleDiscard}

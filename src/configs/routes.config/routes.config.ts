@@ -142,22 +142,30 @@ export const protectedRoutes = [
     },
 
     {
-        key: 'jobs.allPackages',
+        key: 'packages.allPackages',
         path: '/allPackages',
         component: lazy(() => import('@/views/app/Packages/PackagesList')),
         authority: [],
     },
 
     {
-        key: 'jobs.packageItems',
+        key: 'packages.packageItems',
         path: '/package/:id',
         component: lazy(() => import('@/views/app/Packages/PackageItemsList')),
         authority: [],
     },
     {
-        key: 'packages.addPackage',
+        key: 'packages.addPackageParent',
         path: '/add-package',
         component: lazy(() => import('@/views/app/Packages/AddPackage')),
+        authority: [],
+    },
+    {
+        key: 'packages.addPackage',
+        path: '/add-package/:id',
+        component: lazy(
+            () => import('@/views/app/Packages/AddPackage/AddParentPackage')
+        ),
         authority: [],
     },
 

@@ -51,6 +51,7 @@ const Upload = forwardRef<HTMLDivElement, UploadProps>((props, ref) => {
 
     const fileInputField = useRef<HTMLInputElement>(null)
     const [files, setFiles] = useState(fileList)
+
     const [dragOver, setDragOver] = useState(false)
 
     const { themeColor, primaryColorLevel } = useConfig()

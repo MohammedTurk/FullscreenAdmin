@@ -161,7 +161,7 @@ const navigationConfig: NavigationTree[] = [
         authority: [],
         subMenu: [
             {
-                key: 'packages.allJobs',
+                key: 'packages.allPackages',
                 path: '/allPackages',
                 title: 'All Packages',
                 translateKey: 'nav.packages.allPackages',
@@ -171,10 +171,10 @@ const navigationConfig: NavigationTree[] = [
                 subMenu: [],
             },
             {
-                key: 'packages.addPackage',
+                key: 'packages.addPackageParent',
                 path: '/add-package',
                 title: 'Add Package',
-                translateKey: 'nav.packages.addPackage',
+                translateKey: 'nav.packages.addPackageParent',
                 icon: '',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [],

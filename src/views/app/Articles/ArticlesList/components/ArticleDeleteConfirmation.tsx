@@ -38,7 +38,7 @@ const ArticleDeleteConfirmation = () => {
                     type="success"
                     duration={2500}
                 >
-                    Service successfuly deleted
+                    Article successfuly deleted
                 </Notification>,
                 {
                     placement: 'top-center',
@@ -51,14 +51,14 @@ const ArticleDeleteConfirmation = () => {
         <ConfirmDialog
             isOpen={dialogOpen}
             type="danger"
-            title="Delete service"
+            title="Delete article"
             confirmButtonColor="red-600"
             onClose={onDialogClose}
             onRequestClose={onDialogClose}
             onCancel={onDialogClose}
             onConfirm={onDelete}
         >
-            <p>Are you sure you want to delete this service?</p>
+            <p>Are you sure you want to delete this article?</p>
         </ConfirmDialog>
     )
 }

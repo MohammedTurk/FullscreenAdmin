@@ -1,9 +1,9 @@
 import { forwardRef, useState } from 'react'
-import { FormContainer } from '@/components/ui/Form'
+import { FormContainer, FormItem } from '@/components/ui/Form'
 import Button from '@/components/ui/Button'
 import StickyFooter from '@/components/shared/StickyFooter'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { Form, Formik, FormikProps } from 'formik'
+import { Field, Form, Formik, FormikProps } from 'formik'
 import cloneDeep from 'lodash/cloneDeep'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { AiOutlineSave } from 'react-icons/ai'
@@ -12,6 +12,7 @@ import PackageFields from './PackageFields'
 import JobFile from './JobFile'
 import PackageImages from './PackageImages'
 import ParentPackageImages from './ParentPackageImages'
+import PackageImagesTest from './PackageImagesTest'
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
@@ -36,8 +37,8 @@ type InitialData = {
         img: string
     }[]
     images?: []
-    parentImgList?: []
-    parentImage: string
+    // parentImgList?: []
+    // parentImage: string
 }
 
 export type FormModel = Omit<InitialData, 'tags'> & {
@@ -80,7 +81,7 @@ const validationSchema = Yup.object().shape({
     englishItems: Yup.array().of(
         Yup.string().required('English Item Name is Required')
     ),
-    parentImage: Yup.mixed().required('Image is Required'),
+    // parentImage: Yup.mixed().required('Image is Required'),
 })
 
 const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
@@ -145,14 +146,39 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
             img: '',
             imgList: [],
             images: [],
-            parentImgList: [],
-            parentImage: '',
+            // parentImgList: [],
+            // parentImage: '',
         },
         onFormSubmit,
         onDiscard,
         onDelete,
     } = props
+    function createFileList(data) {
+        const fileList = []
 
+        // Iterate through the data array
+        for (let i = 0; i < data.length; i++) {
+            const fileArray = data[i]
+
+            // Check if the element is an array and has at least one item
+            if (Array.isArray(fileArray) && fileArray.length > 0) {
+                const file = fileArray[0]
+
+                // Check if the item is a File object
+                if (file instanceof File) {
+                    fileList.push(file)
+                }
+            }
+        }
+
+        // Create a DataTransfer object and set its files property
+        const dataTransfer = new DataTransfer()
+        fileList.forEach((file) => {
+            dataTransfer.items.add(file)
+        })
+
+        return dataTransfer.files
+    }
     return (
         <>
             <Formik
@@ -163,9 +189,13 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     const data = cloneDeep(values)
+                    const path = location.pathname.substring(
+                        location.pathname.lastIndexOf('/') + 1
+                    )
 
                     const formData = new FormData()
-                    formData.append('icon', data.parentImage)
+                    // formData.append('icon', data.parentImage)
+                    formData.append('parentId', path)
                     formData.append('name[ar]', data.arabicName)
                     formData.append('name[en]', data.englishName)
                     formData.append('price', data.price)
@@ -180,8 +210,16 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                     formData.append('items[en]', data.englishItems)
                     formData.append('details[ar]', data.arabicDetails)
                     formData.append('details[en]', data.englishDetails)
-                    formData.append('images', data.images)
+                    data.images.forEach((image: any, index) => {
+                        formData.append(`images`, ...image)
+                    })
+                    // const fileList = createFileList(data.images)
+
+                    // formData.append('images', fileList)
+                    // console.log(fileList)
+
                     formData.append('isDefault', data.isDefault)
+                    // formData.append('isDefault', data.isDefault)
 
                     onFormSubmit?.(formData, setSubmitting)
                 }}
@@ -198,14 +236,49 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                                     />
                                 </div>
                                 <div className="lg:col-span-1">
-                                    <PackageImages values={values} />
-                                    <div className="mt-5">
+                                    {/* <div className="mb-5">
                                         <ParentPackageImages
                                             values={values}
                                             errors={errors}
                                             touched={touched}
                                         />
-                                    </div>
+                                    </div> */}
+                                    <PackageImages values={values} />
+                                    {/* <PackageImagesTest values={values} /> */}
+                                    {/* <div>
+                                        <label htmlFor="file">
+                                            Upload File:
+                                        </label>
+                                        <FormItem>
+                                            <Field name="images">
+                                                {({ field, form }) => (
+                                                    <input
+                                                        multiple
+                                                        type="file"
+                                                        id="file"
+                                                        name="file"
+                                                        onChange={(event) => {
+                                                            form.setFieldValue(
+                                                                'images',
+                                                                event
+                                                                    .currentTarget
+                                                                    .files
+                                                            )
+                                                        }}
+                                                        accept=".jpg, .jpeg, .png, .pdf" // Define the accepted file types
+                                                    />
+                                                )}
+                                            </Field>
+                                        </FormItem>
+                                    </div> */}
+                                    {/* <div>
+                                        <h4>Selected File:</h4>
+                                        {values.file ? (
+                                            <p>{values.file.name}</p>
+                                        ) : (
+                                            <p>No file selected</p>
+                                        )}
+                                    </div> */}
                                 </div>
                             </div>
                             <StickyFooter

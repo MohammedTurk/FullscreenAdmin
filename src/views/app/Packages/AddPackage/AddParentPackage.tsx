@@ -1,17 +1,18 @@
 import toast from '@/components/ui/toast'
 import Notification from '@/components/ui/Notification'
 import { useNavigate } from 'react-router-dom'
-import ProductForm, {
+import PackageForm, {
     FormModel,
     SetSubmitting,
-} from '../ArticleForm/ArticleForm'
-import { apiAddNewArticle } from '@/services/ArticlesList'
+} from '../PackageForm/PackageForm'
+import { apiAddNewPackage } from '@/services/PackagesList'
+import ParentPackageForm from '../PackageForm/ParentPackageForm'
 
-const AddArticle = () => {
+const AddParentPackage = () => {
     const navigate = useNavigate()
 
-    const AddArticle = async (data: FormModel) => {
-        const response = await apiAddNewArticle(data)
+    const AddPackage = async (data: FormModel) => {
+        const response = await apiAddNewPackage(data)
         return response.data
     }
 
@@ -21,7 +22,7 @@ const AddArticle = () => {
     ) => {
         setSubmitting(true)
         try {
-            const success = await AddArticle(values)
+            const success = await AddPackage(values)
             setSubmitting(false)
             if (success) {
                 toast.push(
@@ -30,13 +31,13 @@ const AddArticle = () => {
                         type="success"
                         duration={2500}
                     >
-                        Article successfuly added
+                        Package successfuly added
                     </Notification>,
                     {
                         placement: 'top-center',
                     }
                 )
-                navigate('/articles')
+                navigate(-1)
             }
         } catch (error) {
             toast.push(
@@ -54,12 +55,12 @@ const AddArticle = () => {
     }
 
     const handleDiscard = () => {
-        navigate('/articles')
+        navigate(-1)
     }
 
     return (
         <>
-            <ProductForm
+            <PackageForm
                 type="new"
                 onFormSubmit={handleFormSubmit}
                 onDiscard={handleDiscard}
@@ -68,4 +69,4 @@ const AddArticle = () => {
     )
 }
 
-export default AddArticle
+export default AddParentPackage

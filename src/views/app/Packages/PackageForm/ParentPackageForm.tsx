@@ -8,22 +8,18 @@ import cloneDeep from 'lodash/cloneDeep'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { AiOutlineSave } from 'react-icons/ai'
 import * as Yup from 'yup'
-import ArticleFields from './ArticleFields'
-import ArticleImages from './ArticleImages'
+import PackageFields from './PackageFields'
+import JobFile from './JobFile'
+import PackageImages from './PackageImages'
+import ParentPackageImages from './ParentPackageImages'
+import ParentPackageFields from './ParentPackageFields'
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
 
 type InitialData = {
-    title?: string
-    content?: string
-    tags?: string[]
-    image?: string
-    imgList?: {
-        id: string
-        name: string
-        img: string
-    }[]
+    arabicName?: string
+    englishName?: string
 }
 
 export type FormModel = Omit<InitialData, 'tags'> & {
@@ -36,7 +32,7 @@ export type OnDeleteCallback = React.Dispatch<React.SetStateAction<boolean>>
 
 type OnDelete = (callback: OnDeleteCallback) => void
 
-type ArticleForm = {
+type PackageForm = {
     initialData?: InitialData
     type: 'edit' | 'new'
     onDiscard?: () => void
@@ -45,9 +41,8 @@ type ArticleForm = {
 }
 
 const validationSchema = Yup.object().shape({
-    title: Yup.string().required('Title is Required'),
-    content: Yup.string().required('Content is Required'),
-    image: Yup.mixed().required('Image is Required'),
+    arabicName: Yup.string().required('Arabic Name is Required'),
+    englishName: Yup.string().required('English Name is Required'),
 })
 
 const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
@@ -80,28 +75,25 @@ const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
             <ConfirmDialog
                 isOpen={dialogOpen}
                 type="danger"
-                title="Delete article"
+                title="Delete Package"
                 confirmButtonColor="red-600"
                 onClose={onConfirmDialogClose}
                 onRequestClose={onConfirmDialogClose}
                 onCancel={onConfirmDialogClose}
                 onConfirm={handleConfirm}
             >
-                <p>Are you sure you want to delete this article?</p>
+                <p>Are you sure you want to delete this Package?</p>
             </ConfirmDialog>
         </>
     )
 }
 
-const ArticleForm = forwardRef<FormikRef, ArticleForm>((props, ref) => {
+const ParentPackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
     const {
         type,
         initialData = {
-            title: '',
-            content: '',
-            tags: [''],
-            imgList: [],
-            image: '',
+            arabicName: '',
+            englishName: '',
         },
         onFormSubmit,
         onDiscard,
@@ -118,15 +110,35 @@ const ArticleForm = forwardRef<FormikRef, ArticleForm>((props, ref) => {
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     const data = cloneDeep(values)
+                    const path = location.pathname.substring(
+                        location.pathname.lastIndexOf('/') + 1
+                    )
+
                     const formData = new FormData()
-                    formData.append('image', data.image)
-                    formData.append('title', data.title)
-                    data.tags.forEach((tag: string, index: number) => {
-                        formData.append(`tags[${index}][ar]`, tag)
-                        formData.append(`tags[${index}][en]`, tag)
-                    })
-                    formData.append('content', data.content)
-                    onFormSubmit?.(formData, setSubmitting)
+                    formData.append('icon', data.parentImage)
+                    console.log('icon', data.parentImage)
+
+                    // formData.append('parentId', path)
+                    formData.append('name[ar]', data.arabicName)
+                    formData.append('name[en]', data.englishName)
+                    // formData.append('price', data.price)
+                    // formData.append('type[ar]', data.arabicType)
+                    // formData.append('type[en]', data.englishType)
+                    // formData.append('serviceNames[ar]', data.arabicServiceNames)
+                    // formData.append(
+                    //     'serviceNames[en]',
+                    //     data.englishServiceNames
+                    // )
+                    // formData.append('items[ar]', data.arabicItems)
+                    // formData.append('items[en]', data.englishItems)
+                    // formData.append('details[ar]', data.arabicDetails)
+                    // formData.append('details[en]', data.englishDetails)
+                    // formData.append('images', data.images)
+
+                    // formData.append('isDefault', data.isDefault)
+                    // formData.append('isDefault', data.isDefault)
+
+                    // onFormSubmit?.(formData, setSubmitting)
                 }}
             >
                 {({ values, touched, errors, isSubmitting }) => (
@@ -134,18 +146,21 @@ const ArticleForm = forwardRef<FormikRef, ArticleForm>((props, ref) => {
                         <FormContainer>
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                 <div className="lg:col-span-2">
-                                    <ArticleFields
+                                    <ParentPackageFields
                                         touched={touched}
                                         errors={errors}
                                         values={values}
                                     />
                                 </div>
                                 <div className="lg:col-span-1">
-                                    <ArticleImages
-                                        values={values}
-                                        errors={errors}
-                                        touched={touched}
-                                    />
+                                    {/* <PackageImages values={values} /> */}
+                                    <div className="mt-5">
+                                        <ParentPackageImages
+                                            values={values}
+                                            errors={errors}
+                                            touched={touched}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <StickyFooter
@@ -187,6 +202,6 @@ const ArticleForm = forwardRef<FormikRef, ArticleForm>((props, ref) => {
     )
 })
 
-ArticleForm.displayName = 'ArticleForm'
+ParentPackageForm.displayName = 'ParentPackageForm'
 
-export default ArticleForm
+export default ParentPackageForm
