@@ -4,53 +4,50 @@ import DoubleSidedImage from '@/components/shared/DoubleSidedImage'
 import toast from '@/components/ui/toast'
 import Notification from '@/components/ui/Notification'
 import reducer, {
-    getService,
     useAppSelector,
     useAppDispatch,
-    updateService,
-    deleteService,
+    getProject,
+    deleteProject,
+    updateProject,
 } from './store'
 import { injectReducer } from '@/store'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import ProductForm, {
+import ProjectForm, {
     FormModel,
     SetSubmitting,
     OnDeleteCallback,
-} from '@/views/app/Services/ServiceForm/ServiceForm'
+} from '@/views/app/Projects/ProjectForm/ProjectForm'
 import isEmpty from 'lodash/isEmpty'
 
-injectReducer('serviceEditSlice', reducer)
+injectReducer('projectEditSlice', reducer)
 
-const ServiceEdit = () => {
+const ProjectEdit = () => {
     const dispatch = useAppDispatch()
 
     const location = useLocation()
     const navigate = useNavigate()
 
-    const serviceData = useAppSelector(
-        (state) => state.serviceEditSlice.data.serviceData
+    const projectData = useAppSelector(
+        (state) => state?.projectEditSlice?.data?.projectData
     )
+    console.log(useAppSelector((state) => state?.projectEditSlice))
 
     const data: any = {}
-    if (serviceData) {
-        data.arabicName = serviceData?.data?.name?.ar
-        data.englishName = serviceData?.data?.name?.en
-        data.category = serviceData?.data?.category?.en
-        data.arabicDescription = serviceData?.data?.description?.ar
-        data.englishDescription = serviceData?.data?.description?.en
-        data.arabicDetails = serviceData?.data?.details?.ar
-        data.englishDetails = serviceData?.data?.details?.en
-        data.image = serviceData?.data?.image
-        data.serviceNo = serviceData?.data?.serviceNo
+    if (projectData) {
+        data.name = projectData?.data?.name
+        data.category = projectData?.data?.category
+        data.arabicDescription = projectData?.data?.description?.ar
+        data.englishDescription = projectData?.data?.description?.en
+        data.image = projectData?.data?.file
     }
 
     const loading = useAppSelector(
-        (state) => state.serviceEditSlice.data.loading
+        (state) => state?.projectEditSlice?.data?.loading
     )
 
     const fetchData = (data: { _id: string }) => {
-        dispatch(getService(data))
+        dispatch(getProject(data))
     }
 
     const handleFormSubmit = async (
@@ -59,7 +56,7 @@ const ServiceEdit = () => {
     ) => {
         setSubmitting(true)
 
-        const success = await updateService(values, serviceData?.data?._id)
+        const success = await updateProject(values, projectData?.data?._id)
         setSubmitting(false)
         if (success) {
             popNotification('updated')
@@ -67,13 +64,13 @@ const ServiceEdit = () => {
     }
 
     const handleDiscard = () => {
-        navigate('/services')
+        navigate('/allProjects')
     }
 
     const handleDelete = async (setDialogOpen: OnDeleteCallback) => {
         setDialogOpen(false)
 
-        const success = await deleteService({ _id: serviceData?.data?._id })
+        const success = await deleteProject({ _id: projectData?.data?._id })
         if (success) {
             popNotification('deleted')
         }
@@ -86,13 +83,13 @@ const ServiceEdit = () => {
                 type="success"
                 duration={2500}
             >
-                Service successfuly {keyword}
+                Project successfuly {keyword}
             </Notification>,
             {
                 placement: 'top-center',
             }
         )
-        navigate('/services')
+        navigate('/allProjects')
     }
 
     useEffect(() => {
@@ -108,9 +105,9 @@ const ServiceEdit = () => {
     return (
         <>
             <Loading loading={loading}>
-                {!isEmpty(serviceData) && (
+                {!isEmpty(projectData) && (
                     <>
-                        <ProductForm
+                        <ProjectForm
                             type="edit"
                             initialData={data}
                             onFormSubmit={handleFormSubmit}
@@ -120,18 +117,18 @@ const ServiceEdit = () => {
                     </>
                 )}
             </Loading>
-            {!loading && isEmpty(serviceData) && (
+            {!loading && isEmpty(projectData) && (
                 <div className="h-full flex flex-col items-center justify-center">
                     <DoubleSidedImage
                         src="/img/others/img-2.png"
                         darkModeSrc="/img/others/img-2-dark.png"
                         alt="No product found!"
                     />
-                    <h3 className="mt-8">No product found!</h3>
+                    <h3 className="mt-8">No project found!</h3>
                 </div>
             )}
         </>
     )
 }
 
-export default ServiceEdit
+export default ProjectEdit

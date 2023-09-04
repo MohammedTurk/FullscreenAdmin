@@ -12,7 +12,7 @@ export async function apiGetAllProjects() {
 
 export async function apiDeleteProject(data: any) {
     return ApiService.fetchData({
-        url: `/project/:delete/${data._id}`,
+        url: `/project/delete/${data._id}`,
         method: 'delete',
     })
 }
@@ -29,7 +29,7 @@ export async function apiGetProject<T, U extends Record<string, unknown>>(
     params: U
 ) {
     return ApiService.fetchData({
-        url: '/service/details/' + params._id,
+        url: '/project/details/' + params._id,
         method: 'get',
     })
 }

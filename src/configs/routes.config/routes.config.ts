@@ -198,4 +198,10 @@ export const protectedRoutes = [
         component: lazy(() => import('@/views/app/Projects/AddProject')),
         authority: [],
     },
+    {
+        key: 'projects.editProject',
+        path: '/edit-Project/:id',
+        component: lazy(() => import('@/views/app/Projects/ProjectEdit')),
+        authority: [],
+    },
 ]

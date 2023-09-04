@@ -79,7 +79,7 @@ export async function apiGetPackageDetails<
 
 export async function apiUpdatePackage(data: any, id: string) {
     return ApiService.fetchData({
-        url: '/package/add' + id,
+        url: '/project/update/' + id,
         method: 'put',
         data,
     })
