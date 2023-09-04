@@ -116,7 +116,6 @@ const ParentPackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
 
                     const formData = new FormData()
                     formData.append('icon', data.parentImage)
-                    console.log('icon', data.parentImage)
 
                     // formData.append('parentId', path)
                     formData.append('name[ar]', data.arabicName)
@@ -138,7 +137,7 @@ const ParentPackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                     // formData.append('isDefault', data.isDefault)
                     // formData.append('isDefault', data.isDefault)
 
-                    // onFormSubmit?.(formData, setSubmitting)
+                    onFormSubmit?.(formData, setSubmitting)
                 }}
             >
                 {({ values, touched, errors, isSubmitting }) => (
