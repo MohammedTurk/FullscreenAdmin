@@ -175,6 +175,18 @@ const PackageItemsTable = () => {
     }
     return (
         <>
+            <div className="lg:flex items-center justify-right mb-4">
+                <Button
+                    block
+                    variant="solid"
+                    size="sm"
+                    className="!w-[200px]"
+                    icon={<HiPlusCircle />}
+                    onClick={() => addPackage()}
+                >
+                    Add Package
+                </Button>
+            </div>
             {!data?.loading && data?.packageItemsData.length == 0 ? (
                 <Container className="h-full">
                     <div className="h-full flex flex-col items-center justify-center">
@@ -190,19 +202,6 @@ const PackageItemsTable = () => {
                 </Container>
             ) : (
                 <>
-                    <div className="lg:flex items-center justify-right mb-4">
-                        <Button
-                            block
-                            variant="solid"
-                            size="sm"
-                            className="!w-[200px]"
-                            icon={<HiPlusCircle />}
-                            onClick={() => addPackage()}
-                        >
-                            Add Package
-                        </Button>
-                    </div>
-
                     <DataTable
                         ref={tableRef}
                         columns={columns}
