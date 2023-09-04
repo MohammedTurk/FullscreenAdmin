@@ -201,25 +201,27 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                     formData.append('price', data.price)
                     formData.append('type[ar]', data.arabicType)
                     formData.append('type[en]', data.englishType)
-                    formData.append('serviceNames[ar]', data.arabicServiceNames)
-                    formData.append(
-                        'serviceNames[en]',
-                        data.englishServiceNames
-                    )
-                    formData.append('items[ar]', data.arabicItems)
-                    formData.append('items[en]', data.englishItems)
+                    data.arabicServiceNames.forEach((service: any, index) => {
+                        formData.append(`serviceNames[${index}][ar]`, service)
+                    })
+                    data.englishServiceNames.forEach((service: any, index) => {
+                        formData.append(`serviceNames[${index}][en]`, service)
+                    })
+
+                    data.arabicItems.forEach((item: any, index) => {
+                        formData.append(`items[${index}][ar]`, item)
+                    })
+                    data.englishItems.forEach((item: any, index) => {
+                        formData.append(`items[${index}][en]`, item)
+                    })
+
                     formData.append('details[ar]', data.arabicDetails)
                     formData.append('details[en]', data.englishDetails)
                     data.images.forEach((image: any, index) => {
                         formData.append(`images`, ...image)
                     })
-                    // const fileList = createFileList(data.images)
-
-                    // formData.append('images', fileList)
-                    // console.log(fileList)
 
                     formData.append('isDefault', data.isDefault)
-                    // formData.append('isDefault', data.isDefault)
 
                     onFormSubmit?.(formData, setSubmitting)
                 }}
