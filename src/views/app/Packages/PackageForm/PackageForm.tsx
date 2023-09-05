@@ -173,7 +173,11 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                     )
 
                     const formData = new FormData()
-                    formData.append('parentId', selectedPackage._id || path)
+                    if (type == 'edit') {
+                        formData.append('parentId', selectedPackage._id)
+                    } else {
+                        formData.append('parentId', path)
+                    }
                     formData.append('name[ar]', data.arabicName)
                     formData.append('name[en]', data.englishName)
                     formData.append('price', data.price)
