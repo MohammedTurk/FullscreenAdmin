@@ -119,7 +119,9 @@ const TestimonialForm = forwardRef<FormikRef, ArticleForm>((props, ref) => {
                 onSubmit={(values, { setSubmitting }) => {
                     const data = cloneDeep(values)
                     const formData = new FormData()
-                    formData.append('image', data.image)
+                    if (typeof data.image !== 'string') {
+                        formData.append('image', data.image)
+                    }
                     formData.append('name', data.name)
                     formData.append('content[ar]', data.arabicContent)
                     formData.append('content[en]', data.englishContent)

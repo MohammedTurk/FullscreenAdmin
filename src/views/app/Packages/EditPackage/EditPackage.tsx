@@ -19,8 +19,6 @@ import PackageForm, {
     OnDeleteCallback,
 } from '@/views/app/Packages/PackageForm/PackageForm'
 import isEmpty from 'lodash/isEmpty'
-import PackageFormEdit from '../PackageForm/PackageFormEdit'
-import ParentPackageForm from '../PackageForm/ParentPackageForm'
 
 injectReducer('packageEditSlice', reducer)
 

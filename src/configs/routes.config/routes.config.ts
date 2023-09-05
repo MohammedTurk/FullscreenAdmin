@@ -219,4 +219,18 @@ export const protectedRoutes = [
         component: lazy(() => import('@/views/app/Contactus/ContactusList')),
         authority: [],
     },
+    {
+        key: 'systemHeaders.allHeaders',
+        path: '/allHeaders',
+        component: lazy(
+            () => import('@/views/app/SystemHeader/SystemHeaderList')
+        ),
+        authority: [],
+    },
+    {
+        key: 'systemHeaders.addHeader',
+        path: '/add-header',
+        component: lazy(() => import('@/views/app/SystemHeader/AddHeader')),
+        authority: [],
+    },
 ]

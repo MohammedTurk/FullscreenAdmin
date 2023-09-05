@@ -45,7 +45,7 @@ type ImageListProps = {
     ]
 }
 
-type ServiceImagesProps = {
+type SystemHeaderImagesProps = {
     values: FormModel
     touched: FormikTouched<FormFieldsName>
     errors: FormikErrors<FormFieldsName>
@@ -136,23 +136,30 @@ const ImageList = (props: ImageListProps) => {
     )
 }
 
-const ServiceImages = (props: ServiceImagesProps) => {
+const SystemHeaderImages = (props: SystemHeaderImagesProps) => {
     const { touched, errors, values } = props
 
     const beforeUpload = (file: FileList | null) => {
         let valid: boolean | string = true
 
-        const allowedFileType = ['image/jpeg', 'image/png', 'image/svg']
-        const maxFileSize = 5000000
+        const allowedFileType = [
+            'image/jpeg',
+            'image/png',
+            'image/svg',
+            'image/jpg',
+            'image/gif',
+        ]
+        const maxFileSize = 3000000
 
         if (file) {
             for (const f of file) {
                 if (!allowedFileType.includes(f.type)) {
-                    valid = 'Please upload a .jpeg or .png file!'
+                    valid =
+                        'Please upload a .jpeg or .png  or gif or svg or jpg!'
                 }
 
                 if (f.size >= maxFileSize) {
-                    valid = 'Upload image cannot more then 5000kb!'
+                    valid = 'Upload image cannot more then 3MB!'
                 }
             }
         }
@@ -195,8 +202,8 @@ const ServiceImages = (props: ServiceImagesProps) => {
 
     return (
         <AdaptableCard className="mb-4">
-            <h5>Service Image</h5>
-            <p className="mb-6">Add or change image for the service</p>
+            <h5>System Header Image</h5>
+            <p className="mb-6">Add or change image for the system header</p>
             <FormItem
                 invalid={(errors.image && touched.image) as boolean}
                 errorMessage={errors.image}
@@ -264,9 +271,6 @@ const ServiceImages = (props: ServiceImagesProps) => {
                                             browse
                                         </span>
                                     </p>
-                                    <p className="mt-1 opacity-60 dark:text-white">
-                                        Support: jpeg, png
-                                    </p>
                                 </div>
                             </Upload>
                         )
@@ -277,4 +281,4 @@ const ServiceImages = (props: ServiceImagesProps) => {
     )
 }
 
-export default ServiceImages
+export default SystemHeaderImages

@@ -50,6 +50,11 @@ const ActionColumn = ({ row }: { row: PackageItem }) => {
         navigate(`/view-package-details/${row._id}`)
     }
     const onEdit = () => {
+        const path = location.pathname.substring(
+            location.pathname.lastIndexOf('/') + 1
+        )
+
+        dispatch(setSelectedPackage({ _id: path }))
         navigate(`/edit-sub-package/${row._id}`)
     }
     const onPackageDelete = (_id: string) => {
@@ -86,10 +91,6 @@ const PackageItemsTable = () => {
     const data = useAppSelector((state) => state.PackageSlice.data)
     const packageDeleteConfirmation = useAppSelector(
         (state) => state.PackageSlice?.data?.packageDeleteConfirmation
-    )
-    console.log(
-        'packageDeleteConfirmation',
-        useAppSelector((state) => state.PackageSlice?.data)
     )
 
     const selectedPackage = useAppSelector(

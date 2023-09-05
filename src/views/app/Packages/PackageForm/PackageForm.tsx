@@ -13,6 +13,7 @@ import JobFile from './JobFile'
 import PackageImages from './PackageImages'
 import ParentPackageImages from './ParentPackageImages'
 import PackageImagesTest from './PackageImagesTest'
+import { useAppSelector } from '../PackageItemsList/store'
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
@@ -153,6 +154,9 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
         onDiscard,
         onDelete,
     } = props
+    const selectedPackage = useAppSelector(
+        (state) => state.PackageSlice?.data?.selectedPackage
+    )
 
     return (
         <>
@@ -169,7 +173,7 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                     )
 
                     const formData = new FormData()
-                    formData.append('parentId', path)
+                    formData.append('parentId', selectedPackage._id || path)
                     formData.append('name[ar]', data.arabicName)
                     formData.append('name[en]', data.englishName)
                     formData.append('price', data.price)
@@ -209,14 +213,7 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
 
                     data.images.forEach((item: any[], index: number) => {
                         if (typeof item === 'string') {
-                            let image = fetch(item)
-                                .then((response) => response.blob())
-                                .then((blob) => {
-                                    // Create a File object from the blob
-                                    return new File([blob], 'filename.jpg') // You can set the desired filename here
-                                })
-                            console.log('imageimageimageimage', image)
-                            // formData.append(`images`, item)
+                            return
                         } else {
                             formData.append(`images`, ...item)
                         }

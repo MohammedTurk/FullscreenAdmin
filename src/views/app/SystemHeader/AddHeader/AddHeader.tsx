@@ -1,17 +1,18 @@
 import toast from '@/components/ui/toast'
 import Notification from '@/components/ui/Notification'
 import { useNavigate } from 'react-router-dom'
-import { apiAddNewService } from '@/services/ServicesList'
-import ProductForm, {
+
+import { apiAddHeader } from '@/services/systemHeadersList'
+import SystemHeaderForm, {
     FormModel,
     SetSubmitting,
-} from '../ServiceForm/ServiceForm'
+} from '../SystemHeaderForm/SystemHeaderForm'
 
-const AddService = () => {
+const AddHeader = () => {
     const navigate = useNavigate()
 
-    const addService = async (data: FormModel) => {
-        const response = await apiAddNewService(data)
+    const addHeader = async (data: FormModel) => {
+        const response = await apiAddHeader(data)
         return response.data
     }
 
@@ -21,7 +22,7 @@ const AddService = () => {
     ) => {
         setSubmitting(true)
         try {
-            const success = await addService(values)
+            const success = await addHeader(values)
             setSubmitting(false)
             if (success) {
                 toast.push(
@@ -30,13 +31,13 @@ const AddService = () => {
                         type="success"
                         duration={2500}
                     >
-                        Product successfuly added
+                        Header successfuly added
                     </Notification>,
                     {
                         placement: 'top-center',
                     }
                 )
-                navigate('/services')
+                navigate('/allHeaders')
             }
         } catch (error) {
             toast.push(
@@ -54,12 +55,12 @@ const AddService = () => {
     }
 
     const handleDiscard = () => {
-        navigate('/services')
+        navigate('/allHeaders')
     }
 
     return (
         <>
-            <ProductForm
+            <SystemHeaderForm
                 type="new"
                 onFormSubmit={handleFormSubmit}
                 onDiscard={handleDiscard}
@@ -68,4 +69,4 @@ const AddService = () => {
     )
 }
 
-export default AddService
+export default AddHeader

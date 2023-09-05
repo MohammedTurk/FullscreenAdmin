@@ -245,6 +245,38 @@ const navigationConfig: NavigationTree[] = [
             },
         ],
     },
+
+    {
+        key: 'systemHeaders',
+        path: '',
+        title: 'System Headers Menu',
+        translateKey: 'nav.systemHeaders.systemHeaders',
+        icon: 'system',
+        type: NAV_ITEM_TYPE_COLLAPSE,
+        authority: [],
+        subMenu: [
+            {
+                key: 'systemHeaders.allHeaders',
+                path: '/allHeaders',
+                title: 'All Headers',
+                translateKey: 'nav.systemHeaders.allHeaders',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
+            {
+                key: 'systemHeaders.addHeader',
+                path: '/add-header',
+                title: 'Add Header',
+                translateKey: 'nav.systemHeaders.addHeader',
+                icon: '',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [],
+                subMenu: [],
+            },
+        ],
+    },
 ]
 
 export default navigationConfig

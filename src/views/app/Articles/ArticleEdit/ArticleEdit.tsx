@@ -41,12 +41,6 @@ const ArticleEdit = () => {
         articleData?.data?.tags.forEach((tag: string) => {
             data.tags.push(tag)
         })
-        // data.arabicDescription = productData?.data?.description?.ar
-        // data.englishDescription = productData?.data?.description?.en
-        // data.arabicDetails = productData?.data?.details?.ar
-        // data.englishDetails = productData?.data?.details?.en
-        // data.image = productData?.data?.image
-        // data.serviceNo = productData?.data?.serviceNo
     }
 
     const loading = useAppSelector(

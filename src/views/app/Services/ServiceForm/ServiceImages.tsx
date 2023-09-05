@@ -142,17 +142,24 @@ const ServiceImages = (props: ServiceImagesProps) => {
     const beforeUpload = (file: FileList | null) => {
         let valid: boolean | string = true
 
-        const allowedFileType = ['image/jpeg', 'image/png', 'image/svg']
-        const maxFileSize = 5000000
+        const allowedFileType = [
+            'image/jpeg',
+            'image/png',
+            'image/svg',
+            'image/jpg',
+            'image/gif',
+        ]
+        const maxFileSize = 3000000
 
         if (file) {
             for (const f of file) {
                 if (!allowedFileType.includes(f.type)) {
-                    valid = 'Please upload a .jpeg or .png file!'
+                    valid =
+                        'Please upload a .jpeg or .png  or gif or svg or jpg!'
                 }
 
                 if (f.size >= maxFileSize) {
-                    valid = 'Upload image cannot more then 5000kb!'
+                    valid = 'Upload image cannot more then 3MB!'
                 }
             }
         }

@@ -1,5 +1,9 @@
 import { apiUpdatePackage } from '@/services/PackagesList'
-import { apiDeleteProject, apiGetProject } from '@/services/ProjectsList'
+import {
+    apiDeleteProject,
+    apiGetProject,
+    apiUpdateProject,
+} from '@/services/ProjectsList'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 export type projectEditState = {
@@ -22,7 +26,7 @@ export const updateProject = async <T, U extends Record<string, unknown>>(
     data: U,
     id: string
 ) => {
-    const response = await apiUpdatePackage(data, id)
+    const response = await apiUpdateProject(data, id)
     return response.data
 }
 
