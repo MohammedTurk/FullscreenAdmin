@@ -49,6 +49,11 @@ const SystemHeaderTable = () => {
 
     const fetchData = () => {
         dispatch(getAllHeaders())
+        if (data?.headersList) {
+            const newTableData = cloneDeep(tableData)
+            newTableData.total = data?.headersList?.length
+            dispatch(setTableData(newTableData))
+        }
     }
     function createMarkup(data: any) {
         return { __html: data }

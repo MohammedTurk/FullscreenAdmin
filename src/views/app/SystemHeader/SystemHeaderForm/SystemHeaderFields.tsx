@@ -17,12 +17,19 @@ type SystemHeaderFields = {
     touched: FormikTouched<FormFieldsName>
     errors: FormikErrors<FormFieldsName>
     values: {
-        category: string
+        type: string
     }
 }
 
 const SystemHeaderFields = (props: SystemHeaderFields) => {
     const { values, touched, errors } = props
+
+    const types = [
+        { label: 'Main', value: 'main' },
+        { label: 'Package', value: 'package' },
+        { label: 'Service', value: 'service' },
+        { label: 'Job', value: 'job' },
+    ]
 
     return (
         <AdaptableCard divider className="mb-4">
@@ -65,13 +72,21 @@ const SystemHeaderFields = (props: SystemHeaderFields) => {
                 invalid={(errors.type && touched.type) as boolean}
                 errorMessage={errors.type}
             >
-                <Field
-                    type="text"
-                    autoComplete="off"
-                    name="type"
-                    placeholder="Name"
-                    component={Input}
-                />
+                <Field name="type">
+                    {({ field, form }: FieldProps) => (
+                        <Select
+                            field={field}
+                            form={form}
+                            options={types}
+                            value={types.filter(
+                                (type) => type.value === values.type
+                            )}
+                            onChange={(option) => {
+                                form.setFieldValue(field.name, option?.value)
+                            }}
+                        />
+                    )}
+                </Field>
             </FormItem>
 
             <FormItem

@@ -14,16 +14,15 @@ export async function apiDeleteHeader<T, U extends Record<string, unknown>>(
     params: U
 ) {
     return ApiService.fetchData({
-        url: `/system/delete/:${params._id}`,
-        method: 'get',
+        url: `/system/delete/${params._id}`,
+        method: 'delete',
     })
 }
 
-export async function apiAddHeader<T, U extends Record<string, unknown>>(
-    params: U
-) {
+export async function apiAddHeader(data: any) {
     return ApiService.fetchData({
         url: '/system/add',
-        method: 'get',
+        method: 'post',
+        data,
     })
 }

@@ -39,7 +39,7 @@ export const deleteHeader = async (data: { _id: string | string[] }) => {
 export const initialTableData: TableQueries = {
     total: 0,
     pageIndex: 1,
-    pageSize: 10,
+    pageSize: 25,
 }
 
 const initialState: systemListState = {

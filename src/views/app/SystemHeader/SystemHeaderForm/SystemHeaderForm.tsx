@@ -128,6 +128,8 @@ const SystemHeaderForm = forwardRef<FormikRef, SystemHeaderForm>(
                     onSubmit={(values, { setSubmitting }) => {
                         const data = cloneDeep(values)
                         const formData = new FormData()
+                        console.log(data)
+
                         if (typeof data.image !== 'string') {
                             formData.append('image', data.image)
                         }
