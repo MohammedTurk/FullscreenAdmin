@@ -12,7 +12,6 @@ import PackageFields from './PackageFields'
 import JobFile from './JobFile'
 import PackageImages from './PackageImages'
 import ParentPackageImages from './ParentPackageImages'
-import PackageImagesTest from './PackageImagesTest'
 import { useAppSelector } from '../PackageItemsList/store'
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -38,6 +37,7 @@ type InitialData = {
         img: string
     }[]
     images?: []
+    link?: ''
     // parentImgList?: []
     // parentImage: string
 }
@@ -82,6 +82,8 @@ const validationSchema = Yup.object().shape({
     englishItems: Yup.array().of(
         Yup.string().required('English Item Name is Required')
     ),
+    link: Yup.string().required('Link is Required'),
+
     // parentImage: Yup.mixed().required('Image is Required'),
 })
 
@@ -147,6 +149,7 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
             img: '',
             imgList: [],
             images: [],
+            link: '',
             // parentImgList: [],
             // parentImage: '',
         },
@@ -209,11 +212,6 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
 
                     formData.append('details[ar]', data.arabicDetails)
                     formData.append('details[en]', data.englishDetails)
-                    console.log('data.imglist', data.imgList)
-
-                    // data.images.forEach((image: any, index: number) => {
-                    //     formData.append(`images`, ...image)
-                    // })
 
                     data.images.forEach((item: any[], index: number) => {
                         if (typeof item === 'string') {
@@ -224,6 +222,7 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                     })
 
                     formData.append('isDefault', data.isDefault)
+                    formData.append('link', data.link)
 
                     onFormSubmit?.(formData, setSubmitting)
                 }}

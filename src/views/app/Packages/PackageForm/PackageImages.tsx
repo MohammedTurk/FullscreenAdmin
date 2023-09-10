@@ -8,6 +8,7 @@ import Upload from '@/components/ui/Upload'
 import { HiEye, HiTrash } from 'react-icons/hi'
 import cloneDeep from 'lodash/cloneDeep'
 import { Field, FieldProps, FieldInputProps, FormikProps } from 'formik'
+import { Notification, toast } from '@/components/ui'
 
 type Image = {
     id: string
@@ -182,9 +183,23 @@ const PackageImages = (props: ProductImagesProps) => {
         field: FieldInputProps<FormModel>,
         files: File[]
     ) => {
+        const MAX_IMAGE_LIMIT = 50
+
         let imageId = '1-img-0'
 
         const latestUpload = files.length - 1
+
+        if (values.imgList.length >= MAX_IMAGE_LIMIT) {
+            toast.push(
+                <Notification title={'Error'} type="danger" duration={2500}>
+                    Maximum image limit reached
+                </Notification>,
+                {
+                    placement: 'top-center',
+                }
+            )
+            return
+        }
 
         if (values.imgList.length > 0) {
             const lastImage = values.imgList[values.imgList.length - 1]
@@ -220,7 +235,6 @@ const PackageImages = (props: ProductImagesProps) => {
         let imgList = cloneDeep(values.imgList)
         imgList = imgList.filter((img) => img.id !== deletedImg.id)
 
-        // Find the index of the deleted image in the images array
         const deletedImageIndex = values.imgList.findIndex(
             (img) => img.id === deletedImg.id
         )
@@ -232,14 +246,8 @@ const PackageImages = (props: ProductImagesProps) => {
             form.setFieldValue(field.name, imgList)
             form.setFieldValue('images', updatedImages)
         }
-        // // Create a new images array without the deleted image
-        // const updatedImages = [
-        //     ...values.images.slice(0, deletedImageIndex),
-        //     ...values.images.slice(deletedImageIndex + 1),
-        // ]
 
         form.setFieldValue(field.name, imgList)
-        // form.setFieldValue('images', updatedImages)
     }
 
     return (

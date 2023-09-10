@@ -25,6 +25,7 @@ type FormFieldsName = {
     arabicDetails?: string
     englishDetails?: string
     isDefault?: boolean
+    link?: string
 }
 
 type PackageFields = {
@@ -258,7 +259,7 @@ const PackageFields = (props: PackageFields) => {
                 )}
             />
             <FormItem
-                label="Arabic Details"
+                label="Arabic Common Questions"
                 labelClass="!justify-start"
                 invalid={
                     (errors.arabicDetails && touched.arabicDetails) as boolean
@@ -278,7 +279,7 @@ const PackageFields = (props: PackageFields) => {
             </FormItem>
 
             <FormItem
-                label="English Details"
+                label="English Common Questions"
                 labelClass="!justify-start"
                 invalid={
                     (errors.englishDetails && touched.englishDetails) as boolean
@@ -295,6 +296,20 @@ const PackageFields = (props: PackageFields) => {
                         />
                     )}
                 </Field>
+            </FormItem>
+            <FormItem
+                label="Link"
+                labelClass="!justify-start"
+                invalid={(errors.link && touched.link) as boolean}
+                errorMessage={errors.link}
+            >
+                <Field
+                    type="text"
+                    autoComplete="off"
+                    name="link"
+                    placeholder="link"
+                    component={Input}
+                />
             </FormItem>
 
             <FieldArray

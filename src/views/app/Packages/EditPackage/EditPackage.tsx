@@ -64,6 +64,7 @@ export const EditPackage = () => {
         data.imgList = ServicesImages
         data.price = PackageData?.price
         data.parentImage = PackageData?.icon
+        data.link = PackageData?.link
     }
 
     const loading = useAppSelector(
