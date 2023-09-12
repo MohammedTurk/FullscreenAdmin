@@ -277,6 +277,28 @@ const navigationConfig: NavigationTree[] = [
             },
         ],
     },
+
+    // {
+    //     key: 'advertisement',
+    //     path: '',
+    //     title: 'Advertisement Menu',
+    //     translateKey: 'nav.advertisement.advertisement',
+    //     icon: 'advertisement',
+    //     type: NAV_ITEM_TYPE_COLLAPSE,
+    //     authority: [],
+    //     subMenu: [
+    //         {
+    //             key: 'advertisement.addAdvertisement',
+    //             path: '/add-advertisement',
+    //             title: 'Add Advertisement',
+    //             translateKey: 'nav.advertisement.addAdvertisement',
+    //             icon: '',
+    //             type: NAV_ITEM_TYPE_ITEM,
+    //             authority: [],
+    //             subMenu: [],
+    //         },
+    //     ],
+    // },
 ]
 
 export default navigationConfig

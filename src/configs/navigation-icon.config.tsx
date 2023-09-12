@@ -11,6 +11,7 @@ import {
     HiViewGrid,
     HiUsers,
     HiTemplate,
+    HiDocumentAdd,
 } from 'react-icons/hi'
 
 export type NavigationIcons = Record<string, JSX.Element>
@@ -28,6 +29,7 @@ const navigationIcon: NavigationIcons = {
     projects: <HiViewGrid />,
     contactUs: <HiUsers />,
     system: <HiTemplate />,
+    advertisement: <HiDocumentAdd />,
 }
 
 export default navigationIcon

@@ -1,32 +1,28 @@
 import { forwardRef, useState } from 'react'
 import { FormContainer } from '@/components/ui/Form'
 import Button from '@/components/ui/Button'
-import hooks from '@/components/ui/hooks'
 import StickyFooter from '@/components/shared/StickyFooter'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { Form, Formik, FormikProps } from 'formik'
-import SystemHeaderImages from './SystemHeaderImages'
 import cloneDeep from 'lodash/cloneDeep'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { AiOutlineSave } from 'react-icons/ai'
 import * as Yup from 'yup'
-import SystemHeaderFields from './SystemHeaderFields'
+import AdvertisementFields from './AdvertisemenFields'
+import AdvertisementImage from './AdvertisementImage'
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
 
 type InitialData = {
-    type: string
-    arabicTitle: string
-    englishTitle: string
-    arabicContent: string
-    englishContent: string
-    imageList?: {
+    title?: string
+    content?: string
+    image?: string
+    imgList?: {
         id: string
         name: string
         img: string
     }[]
-    image?: string
 }
 
 export type FormModel = Omit<InitialData, 'tags'> & {
@@ -39,7 +35,7 @@ export type OnDeleteCallback = React.Dispatch<React.SetStateAction<boolean>>
 
 type OnDelete = (callback: OnDeleteCallback) => void
 
-type SystemHeaderForm = {
+type AdvertisementForm = {
     initialData?: InitialData
     type: 'edit' | 'new'
     onDiscard?: () => void
@@ -48,15 +44,12 @@ type SystemHeaderForm = {
 }
 
 const validationSchema = Yup.object().shape({
-    arabicTitle: Yup.string().required('Arabic Title Is Required'),
-    englishTitle: Yup.string().required('English Title Is Required'),
-    arabicContent: Yup.string().required('Arabic Content is Required'),
-    englishContent: Yup.string().required('English Content is Required'),
-    type: Yup.string().required('Type Is Required'),
+    title: Yup.string().required('Title is Required'),
+    content: Yup.string().required('Content is Required'),
     image: Yup.mixed().required('Image is Required'),
 })
 
-const DeleteProductButton = ({ onDelete }: { onDelete: OnDelete }) => {
+const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
     const [dialogOpen, setDialogOpen] = useState(false)
 
     const onConfirmDialogOpen = () => {
@@ -86,30 +79,27 @@ const DeleteProductButton = ({ onDelete }: { onDelete: OnDelete }) => {
             <ConfirmDialog
                 isOpen={dialogOpen}
                 type="danger"
-                title="Delete header"
+                title="Delete Advertisement "
                 confirmButtonColor="red-600"
                 onClose={onConfirmDialogClose}
                 onRequestClose={onConfirmDialogClose}
                 onCancel={onConfirmDialogClose}
                 onConfirm={handleConfirm}
             >
-                <p>Are you sure you want to delete this header?</p>
+                <p>Are you sure you want to delete this advertisement?</p>
             </ConfirmDialog>
         </>
     )
 }
 
-const SystemHeaderForm = forwardRef<FormikRef, SystemHeaderForm>(
+const AdvertisementForm = forwardRef<FormikRef, AdvertisementForm>(
     (props, ref) => {
         const {
             type,
             initialData = {
-                type: '',
-                arabicTitle: '',
-                englishTitle: '',
-                arabicContent: '',
-                englishContent: '',
-                imageList: [],
+                title: '',
+                content: '',
+                imgList: [],
                 image: '',
             },
             onFormSubmit,
@@ -128,17 +118,14 @@ const SystemHeaderForm = forwardRef<FormikRef, SystemHeaderForm>(
                     onSubmit={(values, { setSubmitting }) => {
                         const data = cloneDeep(values)
                         const formData = new FormData()
-                        console.log(data)
 
                         if (typeof data.image !== 'string') {
                             formData.append('image', data.image)
                         }
-                        formData.append('content[en]', data.englishContent)
-                        formData.append('content[ar]', data.arabicContent)
-                        formData.append('title[en]', data.englishTitle)
-                        formData.append('title[ar]', data.arabicTitle)
-                        formData.append('type', data.type)
 
+                        formData.append('title', data.title)
+
+                        formData.append('content', data.content)
                         onFormSubmit?.(formData, setSubmitting)
                     }}
                 >
@@ -147,14 +134,14 @@ const SystemHeaderForm = forwardRef<FormikRef, SystemHeaderForm>(
                             <FormContainer>
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                     <div className="lg:col-span-2">
-                                        <SystemHeaderFields
+                                        <AdvertisementFields
                                             touched={touched}
                                             errors={errors}
                                             values={values}
                                         />
                                     </div>
                                     <div className="lg:col-span-1">
-                                        <SystemHeaderImages
+                                        <AdvertisementImage
                                             values={values}
                                             errors={errors}
                                             touched={touched}
@@ -167,7 +154,7 @@ const SystemHeaderForm = forwardRef<FormikRef, SystemHeaderForm>(
                                 >
                                     <div>
                                         {type === 'edit' && (
-                                            <DeleteProductButton
+                                            <DeleteServiceButton
                                                 onDelete={onDelete as OnDelete}
                                             />
                                         )}
@@ -201,6 +188,6 @@ const SystemHeaderForm = forwardRef<FormikRef, SystemHeaderForm>(
     }
 )
 
-SystemHeaderForm.displayName = 'SystemHeaderForm'
+AdvertisementForm.displayName = 'AdvertisementForm'
 
-export default SystemHeaderForm
+export default AdvertisementForm

@@ -134,7 +134,7 @@ const ImageList = (props: ImageListProps) => {
     )
 }
 
-const ArticleImages = (props: ServiceImagesProps) => {
+const AdvertisementImage = (props: ServiceImagesProps) => {
     const { touched, errors, values } = props
 
     const beforeUpload = (file: FileList | null) => {
@@ -147,7 +147,7 @@ const ArticleImages = (props: ServiceImagesProps) => {
             'image/jpg',
             'image/gif',
         ]
-        const maxFileSize = 5000000
+        const maxFileSize = 3000000
 
         if (file) {
             for (const f of file) {
@@ -196,8 +196,8 @@ const ArticleImages = (props: ServiceImagesProps) => {
 
     return (
         <AdaptableCard className="mb-4">
-            <h5>Article Image</h5>
-            <p className="mb-6">Add or change image for the article</p>
+            <h5>Advertisement Image</h5>
+            <p className="mb-6">Add or change image for the advertisement </p>
             <FormItem
                 invalid={(errors.image && touched.image) as boolean}
                 errorMessage={errors.image}
@@ -270,4 +270,4 @@ const ArticleImages = (props: ServiceImagesProps) => {
     )
 }
 
-export default ArticleImages
+export default AdvertisementImage
