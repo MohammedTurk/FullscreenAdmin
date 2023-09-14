@@ -39,9 +39,25 @@ const ServiceEdit = () => {
         data.category = serviceData?.data?.category?.en
         data.arabicDescription = serviceData?.data?.description?.ar
         data.englishDescription = serviceData?.data?.description?.en
-        data.arabicDetails = serviceData?.data?.details?.ar
-        data.englishDetails = serviceData?.data?.details?.en
-        data.image = serviceData?.data?.image
+        // data.arabicDetails = serviceData?.data?.details?.ar
+        // data.englishDetails = serviceData?.data?.details?.en
+        // console.log('data', serviceData.data.details)
+        const arabicDetails: any = []
+        const englishDetails: any = []
+        const subImages: any = []
+
+        serviceData?.data?.details.forEach((detailsItem: any) => {
+            arabicDetails.push(detailsItem?.ar)
+            englishDetails.push(detailsItem?.en)
+            if (detailsItem?.image) subImages.push(detailsItem?.image)
+        })
+
+        data.arabicDetails = arabicDetails
+        data.englishDetails = englishDetails
+        data.subImageList = subImages
+        data.subImages = subImages
+
+        data.imageMain = serviceData?.data?.image
         data.serviceNo = serviceData?.data?.serviceNo
     }
 

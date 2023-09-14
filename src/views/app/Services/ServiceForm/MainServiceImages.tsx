@@ -6,7 +6,6 @@ import { FormItem } from '@/components/ui/Form'
 import Dialog from '@/components/ui/Dialog'
 import Upload from '@/components/ui/Upload'
 import { HiEye, HiTrash } from 'react-icons/hi'
-import cloneDeep from 'lodash/cloneDeep'
 import {
     Field,
     FieldProps,
@@ -16,29 +15,20 @@ import {
     FormikErrors,
 } from 'formik'
 
-type Image = {
-    id: string
-    name: string
-    img: string
-}
-
 type FormFieldsName = {
-    name: string
-    productCode: string
-    description: string
-    image: string
+    imageMain: string
 }
 
 type FormModel = {
-    image: string
+    imageMain: string
     [key: string]: any
-    imageList: any
+    imageListMain: any
 }
 
 type ImageListProps = {
-    image: string
+    imageMain: string
     onImageDelete: (image: string) => void
-    imageList: [
+    imageListMain: [
         {
             img: string
         }
@@ -52,7 +42,7 @@ type ServiceImagesProps = {
 }
 
 const ImageList = (props: ImageListProps) => {
-    const { image, onImageDelete, imageList } = props
+    const { imageMain, onImageDelete, imageListMain } = props
 
     const [selectedImg, setSelectedImg] = useState<string>('')
     const [viewOpen, setViewOpen] = useState(false)
@@ -60,6 +50,7 @@ const ImageList = (props: ImageListProps) => {
 
     const onViewOpen = (image: string) => {
         setSelectedImg(image)
+
         setViewOpen(true)
     }
 
@@ -85,8 +76,8 @@ const ImageList = (props: ImageListProps) => {
         setDeleteConfirmationOpen(false)
     }
     let imageData = ''
-    if (imageList !== undefined) {
-        imageData = imageList[0]?.img
+    if (imageListMain !== undefined) {
+        imageData = imageListMain[0]?.img
     }
 
     return (
@@ -94,19 +85,19 @@ const ImageList = (props: ImageListProps) => {
             <div className="group relative rounded border p-2 flex">
                 <img
                     className="rounded max-h-[140px] max-w-full"
-                    src={imageData || image}
+                    src={imageData || imageMain}
                     alt="image"
                 />
                 <div className="absolute inset-2 bg-gray-900/[.7] group-hover:flex hidden text-xl items-center justify-center">
                     <span
                         className="text-gray-100 hover:text-gray-300 cursor-pointer p-1.5"
-                        onClick={() => onViewOpen(image)}
+                        onClick={() => onViewOpen(imageMain)}
                     >
                         <HiEye />
                     </span>
                     <span
                         className="text-gray-100 hover:text-gray-300 cursor-pointer p-1.5"
-                        onClick={() => onDeleteConfirmation(image)}
+                        onClick={() => onDeleteConfirmation(imageMain)}
                     >
                         <HiTrash />
                     </span>
@@ -136,7 +127,7 @@ const ImageList = (props: ImageListProps) => {
     )
 }
 
-const ServiceImages = (props: ServiceImagesProps) => {
+const MainServiceImages = (props: ServiceImagesProps) => {
     const { touched, errors, values } = props
 
     const beforeUpload = (file: FileList | null) => {
@@ -184,46 +175,37 @@ const ServiceImages = (props: ServiceImagesProps) => {
 
         const imageList = [image]
 
-        form.setFieldValue('imageList', imageList)
-        form.setFieldValue('image', files[0])
+        form.setFieldValue('imageListMain', imageList)
+        form.setFieldValue('imageMain', files[0])
     }
 
     const handleImageDelete = (
         form: FormikProps<FormModel>,
-        field: FieldInputProps<FormModel>,
-        deletedImg: Image
+        field: FieldInputProps<FormModel>
     ) => {
-        // let imgList = cloneDeep(values.imgList)
-        // imgList = imgList.filter((img) => img.id !== deletedImg.id)
-
         form.setFieldValue(field.name, [])
-        form.setFieldValue('image', '')
+        form.setFieldValue('imageMain', '')
     }
 
     return (
         <AdaptableCard className="mb-4">
-            <h5>Service Image</h5>
-            <p className="mb-6">Add or change image for the service</p>
+            <h5>Main Service Image</h5>
+            <p className="mb-6">Add or change image for the main service</p>
             <FormItem
-                invalid={(errors.image && touched.image) as boolean}
-                errorMessage={errors.image}
+                invalid={(errors.imageMain && touched.imageMain) as boolean}
+                errorMessage={errors.imageMain}
             >
-                <Field name="image">
+                <Field name="imageMain">
                     {({ field, form }: FieldProps) => {
-                        if (values.imgList?.length > 0 || values.image) {
+                        if (values.imgList?.length > 0 || values.imageMain) {
                             return (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                                     <ImageList
-                                        image={values.image}
+                                        imageMain={values.imageMain}
                                         onImageDelete={(image: string) =>
-                                            handleImageDelete(
-                                                form,
-                                                field,
-                                                image,
-                                                values.imageList
-                                            )
+                                            handleImageDelete(form, field)
                                         }
-                                        imageList={values.imageList}
+                                        imageListMain={values.imageListMain}
                                     />
                                     <Upload
                                         draggable
@@ -271,9 +253,6 @@ const ServiceImages = (props: ServiceImagesProps) => {
                                             browse
                                         </span>
                                     </p>
-                                    <p className="mt-1 opacity-60 dark:text-white">
-                                        Support: jpeg, png
-                                    </p>
                                 </div>
                             </Upload>
                         )
@@ -284,4 +263,4 @@ const ServiceImages = (props: ServiceImagesProps) => {
     )
 }
 
-export default ServiceImages
+export default MainServiceImages

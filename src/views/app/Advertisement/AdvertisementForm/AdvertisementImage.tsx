@@ -98,7 +98,7 @@ const ImageList = (props: ImageListProps) => {
                 <div className="absolute inset-2 bg-gray-900/[.7] group-hover:flex hidden text-xl items-center justify-center">
                     <span
                         className="text-gray-100 hover:text-gray-300 cursor-pointer p-1.5"
-                        onClick={() => onViewOpen(image)}
+                        onClick={() => onViewOpen(imgList[0].img)}
                     >
                         <HiEye />
                     </span>

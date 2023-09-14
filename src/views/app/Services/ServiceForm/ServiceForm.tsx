@@ -6,11 +6,12 @@ import StickyFooter from '@/components/shared/StickyFooter'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import { Form, Formik, FormikProps } from 'formik'
 import ServiceFields from './ServiceFields'
-import ServiceImages from './ServiceImages'
+import MainServiceImages from './MainServiceImages'
 import cloneDeep from 'lodash/cloneDeep'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { AiOutlineSave } from 'react-icons/ai'
 import * as Yup from 'yup'
+import SubServiceImages from './SubServiceImages'
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
@@ -18,7 +19,12 @@ type FormikRef = FormikProps<any>
 type InitialData = {
     arabicName?: string
     englishName?: string
-    imgList?: {
+    imageListMain?: {
+        id: string
+        name: string
+        img: string
+    }[]
+    subImageList?: {
         id: string
         name: string
         img: string
@@ -26,9 +32,11 @@ type InitialData = {
     category?: string
     arabicDescription?: string
     englishDescription?: string
-    arabicDetails?: string
-    englishDetails?: string
-    image?: string
+    // arabicDetails?: string
+    arabicDetails?: string[]
+    englishDetails?: string[]
+    imageMain?: string
+    subImages?: []
 }
 
 export type FormModel = Omit<InitialData, 'tags'> & {
@@ -57,9 +65,16 @@ const validationSchema = Yup.object().shape({
         'English Description is Required'
     ),
     category: Yup.string().required('Category Required'),
-    arabicDetails: Yup.string().required('Arabic Details is Required'),
-    englishDetails: Yup.string().required('English Details is Required'),
-    image: Yup.mixed().required('Image is Required'),
+    arabicDetails: Yup.array().of(
+        Yup.string().required('This field is Required')
+    ),
+    englishDetails: Yup.array().of(
+        Yup.string().required('This field is Required')
+    ),
+
+    imageMain: Yup.mixed().required('Main Image is Required'),
+
+    subImageList: Yup.array().min(1, 'At least one image is required'),
 })
 
 const DeleteProductButton = ({ onDelete }: { onDelete: OnDelete }) => {
@@ -111,13 +126,15 @@ const ServiceForm = forwardRef<FormikRef, ProductForm>((props, ref) => {
         initialData = {
             arabicName: '',
             englishName: '',
-            imgList: [],
             category: '',
-            image: '',
             arabicDescription: '',
             englishDescription: '',
-            arabicDetails: '',
-            englishDetails: '',
+            arabicDetails: [''],
+            englishDetails: [''],
+            imageListMain: [],
+            imageMain: '',
+            subImageList: [],
+            subImages: [],
         },
         onFormSubmit,
         onDiscard,
@@ -135,16 +152,36 @@ const ServiceForm = forwardRef<FormikRef, ProductForm>((props, ref) => {
                 onSubmit={(values, { setSubmitting }) => {
                     const data = cloneDeep(values)
                     const formData = new FormData()
+
                     if (typeof data.image !== 'string') {
-                        formData.append('image', data.image)
+                        formData.append('mainImage', data.imageMain)
                     }
+
+                    data?.subImages?.forEach((item: any[], index: number) => {
+                        if (typeof item === 'string') {
+                            return
+                        } else {
+                            formData.append(`images`, ...item)
+                        }
+                    })
+
                     formData.append('description[en]', data.englishDescription)
                     formData.append('description[ar]', data.arabicDescription)
-                    formData.append('details[en]', data.englishDetails)
-                    formData.append('details[ar]', data.arabicDetails)
+
+                    data?.englishDetails?.forEach(
+                        (item: any, index: number) => {
+                            formData.append(`details[${index}][en]`, item)
+                        }
+                    )
+
+                    data?.arabicDetails?.forEach((item: any, index: number) => {
+                        formData.append(`details[${index}][ar]`, item)
+                    })
+
                     formData.append('name[en]', data.englishName)
                     formData.append('name[ar]', data.arabicName)
                     formData.append('category[en]', data.category)
+
                     let arabicCategory = ''
                     if (data.category == 'programming') {
                         arabicCategory = 'برمجة'
@@ -155,14 +192,16 @@ const ServiceForm = forwardRef<FormikRef, ProductForm>((props, ref) => {
                     } else {
                         arabicCategory = 'الهويات التجارية'
                     }
+
                     formData.append('category[ar]', arabicCategory)
+
                     onFormSubmit?.(formData, setSubmitting)
                 }}
             >
                 {({ values, touched, errors, isSubmitting }) => (
                     <Form>
                         <FormContainer>
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                                 <div className="lg:col-span-2">
                                     <ServiceFields
                                         touched={touched}
@@ -171,7 +210,12 @@ const ServiceForm = forwardRef<FormikRef, ProductForm>((props, ref) => {
                                     />
                                 </div>
                                 <div className="lg:col-span-1">
-                                    <ServiceImages
+                                    <MainServiceImages
+                                        values={values}
+                                        errors={errors}
+                                        touched={touched}
+                                    />
+                                    <SubServiceImages
                                         values={values}
                                         errors={errors}
                                         touched={touched}

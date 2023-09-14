@@ -4,51 +4,52 @@ import DoubleSidedImage from '@/components/shared/DoubleSidedImage'
 import toast from '@/components/ui/toast'
 import Notification from '@/components/ui/Notification'
 import reducer, {
-    getArticle,
     useAppSelector,
     useAppDispatch,
-    deleteArticle,
-    updateArticle,
+    getAdvertisement,
+    updateAdvertisement,
+    deleteAdvertisement,
 } from './store'
 import { injectReducer } from '@/store'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import ArticleForm, {
+import AdvertisementForm, {
     FormModel,
     SetSubmitting,
     OnDeleteCallback,
-} from '@/views/app/Articles/ArticleForm/ArticleForm'
+} from '@/views/app/Advertisement/AdvertisementForm/AdvertisementForm'
 import isEmpty from 'lodash/isEmpty'
 
-injectReducer('articleEditSlice', reducer)
+injectReducer('advertisementEditSlice', reducer)
 
-const ArticleEdit = () => {
+const AdvertisementEdit = () => {
     const dispatch = useAppDispatch()
 
     const location = useLocation()
     const navigate = useNavigate()
 
-    const articleData = useAppSelector(
-        (state) => state.articleEditSlice.data.articleData
+    const advertisementData = useAppSelector(
+        (state) => state.advertisementEditSlice.data.advertisementData
     )
     const data: any = {
         tags: [],
     }
-    if (articleData) {
-        data.image = articleData?.data?.image
-        data.content = articleData?.data?.content
-        data.title = articleData?.data?.title
-        articleData?.data?.tags.forEach((tag: string) => {
-            data.tags.push(tag)
-        })
+
+    if (advertisementData) {
+        data.image = advertisementData?.data?.image
+        data.type = advertisementData?.data?.type
+        data.active = !advertisementData?.data?.isClosed
+        data.relatedId = advertisementData?.data?.relatedId
+        data.arabicText = advertisementData?.data?.text?.ar
+        data.englishText = advertisementData?.data?.text?.en
     }
 
     const loading = useAppSelector(
-        (state) => state.articleEditSlice.data.loading
+        (state) => state.advertisementEditSlice.data.loading
     )
 
     const fetchData = (data: { _id: string }) => {
-        dispatch(getArticle(data))
+        dispatch(getAdvertisement(data))
     }
 
     const handleFormSubmit = async (
@@ -57,7 +58,10 @@ const ArticleEdit = () => {
     ) => {
         setSubmitting(true)
 
-        const success = await updateArticle(values, articleData?.data?._id)
+        const success = await updateAdvertisement(
+            values,
+            advertisementData?.data?._id
+        )
         setSubmitting(false)
         if (success) {
             popNotification('updated')
@@ -65,12 +69,14 @@ const ArticleEdit = () => {
     }
 
     const handleDiscard = () => {
-        navigate('/articles')
+        navigate('/allAdvertisements')
     }
 
     const handleDelete = async (setDialogOpen: OnDeleteCallback) => {
         setDialogOpen(false)
-        const success = await deleteArticle({ _id: articleData?.data?._id })
+        const success = await deleteAdvertisement({
+            _id: advertisementData?.data?._id,
+        })
         if (success) {
             popNotification('deleted')
         }
@@ -83,13 +89,13 @@ const ArticleEdit = () => {
                 type="success"
                 duration={2500}
             >
-                Article successfuly {keyword}
+                Advertisements successfuly {keyword}
             </Notification>,
             {
                 placement: 'top-center',
             }
         )
-        navigate('/articles')
+        navigate('/allAdvertisements')
     }
 
     useEffect(() => {
@@ -105,9 +111,9 @@ const ArticleEdit = () => {
     return (
         <>
             <Loading loading={loading}>
-                {!isEmpty(articleData) && (
+                {!isEmpty(advertisementData) && (
                     <>
-                        <ArticleForm
+                        <AdvertisementForm
                             type="edit"
                             initialData={data}
                             onFormSubmit={handleFormSubmit}
@@ -117,18 +123,18 @@ const ArticleEdit = () => {
                     </>
                 )}
             </Loading>
-            {!loading && isEmpty(articleData) && (
+            {!loading && isEmpty(advertisementData) && (
                 <div className="h-full flex flex-col items-center justify-center">
                     <DoubleSidedImage
                         src="/img/others/img-2.png"
                         darkModeSrc="/img/others/img-2-dark.png"
                         alt="No product found!"
                     />
-                    <h3 className="mt-8">No article found!</h3>
+                    <h3 className="mt-8">No Advertisement Found!</h3>
                 </div>
             )}
         </>
     )
 }
 
-export default ArticleEdit
+export default AdvertisementEdit

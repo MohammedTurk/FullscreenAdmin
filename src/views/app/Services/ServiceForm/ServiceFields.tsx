@@ -2,8 +2,15 @@ import AdaptableCard from '@/components/shared/AdaptableCard'
 import RichTextEditor from '@/components/shared/RichTextEditor'
 import Input from '@/components/ui/Input'
 import { FormItem } from '@/components/ui/Form'
-import { Field, FormikErrors, FormikTouched, FieldProps } from 'formik'
-import { Select } from '@/components/ui'
+import {
+    Field,
+    FormikErrors,
+    FormikTouched,
+    FieldProps,
+    FieldArray,
+} from 'formik'
+import { Button, Select } from '@/components/ui'
+import { HiMinusSm, HiPlus } from 'react-icons/hi'
 
 type FormFieldsName = {
     arabicName: string
@@ -11,16 +18,14 @@ type FormFieldsName = {
     arabicDescription: string
     englishDescription: string
     category: string
-    arabicDetails: string
-    englishDetails: string
+    arabicDetails: string[]
+    englishDetails: string[]
 }
 
 type ServiceFields = {
     touched: FormikTouched<FormFieldsName>
     errors: FormikErrors<FormFieldsName>
-    values: {
-        category: string
-    }
+    values: any
 }
 
 const ServiceFields = (props: ServiceFields) => {
@@ -127,7 +132,8 @@ const ServiceFields = (props: ServiceFields) => {
                     )}
                 </Field>
             </FormItem>
-            <FormItem
+
+            {/* <FormItem
                 label="Arabic Details"
                 labelClass="!justify-start"
                 invalid={
@@ -145,8 +151,143 @@ const ServiceFields = (props: ServiceFields) => {
                         />
                     )}
                 </Field>
-            </FormItem>
-            <FormItem
+            </FormItem> */}
+
+            <FieldArray
+                name="arabicDetails"
+                render={(arrayHelpers) => (
+                    <div className="mb-5">
+                        {values?.arabicDetails?.map(
+                            (item: string, index: number) => (
+                                <div
+                                    key={index}
+                                    className="flex gap-3 items-center"
+                                >
+                                    <FormItem
+                                        className="w-full"
+                                        label={`Arabic Details ${index + 1}`}
+                                        invalid={Boolean(
+                                            errors.arabicDetails &&
+                                                errors.arabicDetails[index] &&
+                                                touched.arabicDetails &&
+                                                touched.arabicDetails[index]
+                                        )}
+                                        errorMessage={
+                                            errors.arabicDetails &&
+                                            errors.arabicDetails[index]
+                                        }
+                                    >
+                                        <Field name={`arabicDetails.${index}`}>
+                                            {({ field, form }: FieldProps) => (
+                                                <RichTextEditor
+                                                    value={field.value}
+                                                    onChange={(val) =>
+                                                        form.setFieldValue(
+                                                            field.name,
+                                                            val
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        </Field>
+                                    </FormItem>
+
+                                    <Button
+                                        type="button"
+                                        variant="twoTone"
+                                        color="red-600"
+                                        size="sm"
+                                        icon={<HiMinusSm />}
+                                        onClick={() =>
+                                            arrayHelpers.remove(index)
+                                        } // remove a product from the list
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
+                            )
+                        )}
+                        <Button
+                            size="md"
+                            icon={<HiPlus />}
+                            type="button"
+                            variant="twoTone"
+                            onClick={() => arrayHelpers.push('')}
+                        >
+                            Add a new arabic details
+                        </Button>
+                    </div>
+                )}
+            />
+
+            <FieldArray
+                name="englishDetails"
+                render={(arrayHelpers) => (
+                    <div className="mb-5">
+                        {values?.englishDetails?.map(
+                            (item: string, index: number) => (
+                                <div
+                                    key={index}
+                                    className="flex gap-3 items-center"
+                                >
+                                    <FormItem
+                                        className="w-full"
+                                        label={`English Details ${index + 1}`}
+                                        invalid={Boolean(
+                                            errors.englishDetails &&
+                                                errors.englishDetails[index] &&
+                                                touched.englishDetails &&
+                                                touched.englishDetails[index]
+                                        )}
+                                        errorMessage={
+                                            errors.englishDetails &&
+                                            errors.englishDetails[index]
+                                        }
+                                    >
+                                        <Field name={`englishDetails.${index}`}>
+                                            {({ field, form }: FieldProps) => (
+                                                <RichTextEditor
+                                                    value={field.value}
+                                                    onChange={(val) =>
+                                                        form.setFieldValue(
+                                                            field.name,
+                                                            val
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        </Field>
+                                    </FormItem>
+
+                                    <Button
+                                        type="button"
+                                        variant="twoTone"
+                                        color="red-600"
+                                        size="sm"
+                                        icon={<HiMinusSm />}
+                                        onClick={() =>
+                                            arrayHelpers.remove(index)
+                                        } // remove a product from the list
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
+                            )
+                        )}
+                        <Button
+                            size="md"
+                            icon={<HiPlus />}
+                            type="button"
+                            variant="twoTone"
+                            onClick={() => arrayHelpers.push('')}
+                        >
+                            Add a new english details
+                        </Button>
+                    </div>
+                )}
+            />
+
+            {/* <FormItem
                 label="English Details"
                 labelClass="!justify-start"
                 invalid={
@@ -164,7 +305,7 @@ const ServiceFields = (props: ServiceFields) => {
                         />
                     )}
                 </Field>
-            </FormItem>
+            </FormItem> */}
         </AdaptableCard>
     )
 }

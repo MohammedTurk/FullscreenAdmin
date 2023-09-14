@@ -33,7 +33,6 @@ export const EditParentPackage = () => {
     const PackageData = useAppSelector(
         (state) => state.packageEditSlice.data.PackageData.data
     )
-    console.log('PackageData', PackageData)
 
     const data: any = {}
     if (PackageData) {

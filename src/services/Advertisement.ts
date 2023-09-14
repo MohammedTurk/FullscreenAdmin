@@ -19,7 +19,7 @@ import ApiService from './ApiService'
 
 export async function apiAddNewAdvertisement(data: any) {
     return ApiService.fetchData({
-        url: '/advertisement/add',
+        url: '/announcement/add',
         method: 'post',
         data,
     })

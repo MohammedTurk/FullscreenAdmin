@@ -7,9 +7,9 @@ import {
     setTableData,
     useAppDispatch,
     useAppSelector,
-    getAllArticles,
-    setSelectedArticle,
     toggleDeleteConfirmation,
+    setSelectedAdvertisement,
+    getAllAdvertisements,
 } from '../store'
 import useThemeClass from '@/utils/hooks/useThemeClass'
 import { useNavigate } from 'react-router-dom'
@@ -18,31 +18,32 @@ import type {
     DataTableResetHandle,
     ColumnDef,
 } from '@/components/shared/DataTable'
-import ArticleDeleteConfirmation from './ArticleDeleteConfirmation'
-import { TextEllipsis } from '@/components/shared'
+import dayjs from 'dayjs'
+import AdvertisementDeleteConfirmation from './AdvertisementDeleteConfirmation'
 
-type Article = {
+type Advertisement = {
     _id: string
-    title: string
-    content: string
+    type: string
+    isClosed: string
     image: string
     createdAt: string
     updatedAt: string
-    tags: string[]
+    relatedId: string
 }
-
-const ActionColumn = ({ row }: { row: Article }) => {
+const ActionColumn = ({ row }: { row: Advertisement }) => {
     const dispatch = useAppDispatch()
     const { textTheme } = useThemeClass()
     const navigate = useNavigate()
 
     const onEdit = () => {
-        navigate(`/edit-article/${row._id}`)
+        console.log(row)
+
+        navigate(`/edit-advertisement/${row._id}`)
     }
 
     const onDelete = () => {
         dispatch(toggleDeleteConfirmation(true))
-        dispatch(setSelectedArticle(row._id))
+        dispatch(setSelectedAdvertisement(row._id))
     }
 
     return (
@@ -63,7 +64,7 @@ const ActionColumn = ({ row }: { row: Article }) => {
     )
 }
 
-const ArticleColumn = ({ row }: { row: Article }) => {
+const AdvertisementColumn = ({ row }: { row: Advertisement }) => {
     const avatar = row.image ? (
         <Avatar src={row.image} />
     ) : (
@@ -73,14 +74,16 @@ const ArticleColumn = ({ row }: { row: Article }) => {
     return <div className="flex items-center">{avatar}</div>
 }
 
-const ArticlesTable = () => {
+const AdvertisementTable = () => {
     const tableRef = useRef<DataTableResetHandle>(null)
     const dispatch = useAppDispatch()
-    const data = useAppSelector((state) => state.articlesListSlice.data)
+    const data = useAppSelector((state) => state.AdvertisementListSlice.data)
+    console.log(data.advertisementList)
 
     const { pageIndex, pageSize, total } = useAppSelector(
-        (state) => state.articlesListSlice.data.tableData
+        (state) => state.AdvertisementListSlice.data.tableData
     )
+
     useEffect(() => {
         fetchData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,13 +95,10 @@ const ArticlesTable = () => {
     )
 
     const fetchData = () => {
-        dispatch(getAllArticles())
-    }
-    function createMarkup(data: any) {
-        return { __html: data }
+        dispatch(getAllAdvertisements())
     }
 
-    const columns: ColumnDef<Article>[] = useMemo(
+    const columns: ColumnDef<Advertisement>[] = useMemo(
         () => [
             {
                 header: 'Image',
@@ -107,50 +107,58 @@ const ArticlesTable = () => {
 
                 cell: (props) => {
                     const row = props.row.original
-                    return <ArticleColumn row={row} />
+                    return <AdvertisementColumn row={row} />
                 },
             },
             {
-                header: 'Title',
-                accessorKey: 'title',
+                header: 'Type',
+                accessorKey: 'type',
                 enableSorting: false,
                 cell: (props) => {
                     const row = props.row.original
-                    return <span className="capitalize">{row.title}</span>
+                    return <span className="capitalize">{row.type}</span>
                 },
             },
+
             {
-                header: 'Content',
+                header: ' Closed',
                 enableSorting: false,
-                accessorKey: 'content',
+                accessorKey: 'isClosed',
                 cell: (props) => {
                     const row = props.row.original
-                    let content = row.content
-                    if (content.length > 50) {
-                        content = content.substring(0, 50) + ' ...'
-                    }
-                    const data = createMarkup(content)
+                    console.log('row', row.isClosed)
 
                     return (
-                        <span
-                            className="capitalize"
-                            dangerouslySetInnerHTML={data}
-                        />
+                        <span className="capitalize">
+                            {row.isClosed.toString()}
+                        </span>
+                    )
+                },
+            },
+
+            {
+                header: 'Created At',
+                enableSorting: false,
+                accessorKey: 'createdAt',
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <span className="capitalize">
+                            {dayjs(row.createdAt).format('DD MMM')}
+                        </span>
                     )
                 },
             },
             {
-                header: 'Tags',
+                header: 'Updated At',
                 enableSorting: false,
-                accessorKey: 'tags',
+                accessorKey: 'updatedAt',
                 cell: (props) => {
                     const row = props.row.original
-                    const data = createMarkup(row.tags)
                     return (
-                        <span
-                            className="capitalize"
-                            dangerouslySetInnerHTML={data}
-                        />
+                        <span className="capitalize">
+                            {dayjs(row.updatedAt).format('DD MMM')}
+                        </span>
                     )
                 },
             },
@@ -182,7 +190,7 @@ const ArticlesTable = () => {
             <DataTable
                 ref={tableRef}
                 columns={columns}
-                data={data.articlesList.articles}
+                data={data.advertisementList}
                 skeletonAvatarColumns={[0]}
                 skeletonAvatarProps={{ className: 'rounded-md' }}
                 loading={data.loading}
@@ -194,9 +202,9 @@ const ArticlesTable = () => {
                 onPaginationChange={onPaginationChange}
                 onSelectChange={onSelectChange}
             />
-            <ArticleDeleteConfirmation />
+            <AdvertisementDeleteConfirmation />
         </>
     )
 }
 
-export default ArticlesTable
+export default AdvertisementTable

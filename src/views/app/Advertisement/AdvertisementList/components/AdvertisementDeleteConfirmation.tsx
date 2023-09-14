@@ -3,23 +3,23 @@ import Notification from '@/components/ui/Notification'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import {
     toggleDeleteConfirmation,
-    deleteService,
-    getAllArticles,
     useAppDispatch,
     useAppSelector,
+    getAllAdvertisements,
+    deleteAdvertisement,
 } from '../store'
 
-const ArticleDeleteConfirmation = () => {
+const AdvertisementDeleteConfirmation = () => {
     const dispatch = useAppDispatch()
     const dialogOpen = useAppSelector(
-        (state) => state.articlesListSlice.data.deleteConfirmation
+        (state) => state.AdvertisementListSlice.data.deleteConfirmation
     )
-    const selectedService = useAppSelector(
-        (state) => state.articlesListSlice.data.selectedArticle
+    const selectedAdvertisement = useAppSelector(
+        (state) => state.AdvertisementListSlice.data.selectedAdvertisement
     )
 
     const tableData = useAppSelector(
-        (state) => state.articlesListSlice.data.tableData
+        (state) => state.AdvertisementListSlice.data.tableData
     )
 
     const onDialogClose = () => {
@@ -28,17 +28,19 @@ const ArticleDeleteConfirmation = () => {
 
     const onDelete = async () => {
         dispatch(toggleDeleteConfirmation(false))
-        const success = await deleteService({ _id: selectedService })
+        const success = await deleteAdvertisement({
+            _id: selectedAdvertisement,
+        })
 
         if (success) {
-            dispatch(getAllArticles())
+            dispatch(getAllAdvertisements())
             toast.push(
                 <Notification
                     title={'Successfuly Deleted'}
                     type="success"
                     duration={2500}
                 >
-                    Article successfuly deleted
+                    Advertisement successfully deleted
                 </Notification>,
                 {
                     placement: 'top-center',
@@ -51,16 +53,16 @@ const ArticleDeleteConfirmation = () => {
         <ConfirmDialog
             isOpen={dialogOpen}
             type="danger"
-            title="Delete article"
+            title="Delete Advertisement"
             confirmButtonColor="red-600"
             onClose={onDialogClose}
             onRequestClose={onDialogClose}
             onCancel={onDialogClose}
             onConfirm={onDelete}
         >
-            <p>Are you sure you want to delete this article?</p>
+            <p>Are you sure you want to delete this advertisement?</p>
         </ConfirmDialog>
     )
 }
 
-export default ArticleDeleteConfirmation
+export default AdvertisementDeleteConfirmation

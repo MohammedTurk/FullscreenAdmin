@@ -233,12 +233,27 @@ export const protectedRoutes = [
         component: lazy(() => import('@/views/app/SystemHeader/AddHeader')),
         authority: [],
     },
-
+    {
+        key: 'advertisement.advertisementList',
+        path: '/allAdvertisements',
+        component: lazy(
+            () => import('@/views/app/Advertisement/AdvertisementList')
+        ),
+        authority: [],
+    },
     {
         key: 'advertisement.addAdvertisement',
         path: '/add-advertisement',
         component: lazy(
             () => import('@/views/app/Advertisement/AddAdvertisement')
+        ),
+        authority: [],
+    },
+    {
+        key: 'advertisement.editAdvertisement',
+        path: '/edit-advertisement/:id',
+        component: lazy(
+            () => import('@/views/app/Advertisement/AdvertisementEdit')
         ),
         authority: [],
     },

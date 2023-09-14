@@ -10,14 +10,23 @@ import { AiOutlineSave } from 'react-icons/ai'
 import * as Yup from 'yup'
 import AdvertisementFields from './AdvertisemenFields'
 import AdvertisementImage from './AdvertisementImage'
+import { injectReducer } from '@/store'
+import articlesReducer from '../../Articles/ArticlesList/store'
+import packagesReducer from '../../Packages/PackagesList/store'
+
+injectReducer('articlesListSlice', articlesReducer)
+injectReducer('PackagesListSlice', packagesReducer)
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
 
 type InitialData = {
-    title?: string
-    content?: string
+    type?: string
+    relatedId?: string
     image?: string
+    active?: boolean
+    arabicText?: string
+    englishText?: string
     imgList?: {
         id: string
         name: string
@@ -44,9 +53,11 @@ type AdvertisementForm = {
 }
 
 const validationSchema = Yup.object().shape({
-    title: Yup.string().required('Title is Required'),
-    content: Yup.string().required('Content is Required'),
+    relatedId: Yup.string().required('This field is required'),
+    type: Yup.string().required('Type is Required'),
     image: Yup.mixed().required('Image is Required'),
+    englishText: Yup.string().required('English Text is Required'),
+    arabicText: Yup.string().required('Arabic Text is Required'),
 })
 
 const DeleteServiceButton = ({ onDelete }: { onDelete: OnDelete }) => {
@@ -97,10 +108,13 @@ const AdvertisementForm = forwardRef<FormikRef, AdvertisementForm>(
         const {
             type,
             initialData = {
-                title: '',
-                content: '',
+                relatedId: '',
+                type: '',
+                active: false,
                 imgList: [],
                 image: '',
+                englishText: '',
+                arabicText: '',
             },
             onFormSubmit,
             onDiscard,
@@ -123,9 +137,14 @@ const AdvertisementForm = forwardRef<FormikRef, AdvertisementForm>(
                             formData.append('image', data.image)
                         }
 
-                        formData.append('title', data.title)
+                        formData.append('relatedId', data.relatedId)
 
-                        formData.append('content', data.content)
+                        formData.append('type', data.type)
+
+                        formData.append('text[en]', data.englishText)
+                        formData.append('text[ar]', data.arabicText)
+
+                        formData.append('isClosed', !data.active)
                         onFormSubmit?.(formData, setSubmitting)
                     }}
                 >
@@ -138,6 +157,7 @@ const AdvertisementForm = forwardRef<FormikRef, AdvertisementForm>(
                                             touched={touched}
                                             errors={errors}
                                             values={values}
+                                            formType={type}
                                         />
                                     </div>
                                     <div className="lg:col-span-1">

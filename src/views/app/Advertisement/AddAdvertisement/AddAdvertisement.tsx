@@ -36,7 +36,7 @@ const AddAdvertisement = () => {
                         placement: 'top-center',
                     }
                 )
-                navigate('/home')
+                navigate('/allAdvertisements')
             }
         } catch (error) {
             toast.push(
@@ -54,7 +54,7 @@ const AddAdvertisement = () => {
     }
 
     const handleDiscard = () => {
-        navigate('/home')
+        navigate('/allAdvertisements')
     }
 
     return (

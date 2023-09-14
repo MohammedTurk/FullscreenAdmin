@@ -14,6 +14,7 @@ export const SLICE_NAME = 'PackagesListSlice'
 
 export const getAllPackages = createAsyncThunk(
     SLICE_NAME + '/getAllPackages',
+
     async () => {
         const response = await apiGetAllPackages()
         return response.data
