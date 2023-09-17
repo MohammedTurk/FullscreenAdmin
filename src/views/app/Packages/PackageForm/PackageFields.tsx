@@ -26,6 +26,8 @@ type FormFieldsName = {
     englishDetails?: string
     isDefault?: boolean
     link?: string
+    arabicExecutionTime?: string
+    englishExecutionTime?: string
 }
 
 type PackageFields = {
@@ -37,15 +39,26 @@ type PackageFields = {
 const PackageFields = (props: PackageFields) => {
     const { values, touched, errors } = props
     const englishTypes = [
+        { label: '7 days', value: '7 days' },
+        { label: '15 days', value: '15 days' },
+        { label: '21 days', value: '21 days' },
+        { label: '30 days', value: '30 days' },
         { label: '3 Month', value: '3 month' },
         { label: '6 Month', value: '6 month' },
         { label: '9 Month', value: '9 month' },
     ]
     const arabicTypes = [
+        { label: '7 أيام', value: '7 أيام' },
+        { label: '15 أيام', value: '15 أيام' },
+        { label: '21 أيام', value: '21 أيام' },
+        { label: '30 أيام', value: '30 أيام' },
         { label: '3 شهور', value: '3 شهور' },
         { label: '6 شهور', value: '6 شهور' },
         { label: '9 شهور', value: '9 شهور' },
     ]
+    const onCheck = (value: boolean, e: ChangeEvent<HTMLInputElement>) => {
+        console.log(value, e)
+    }
 
     return (
         <AdaptableCard divider className="mb-4">
@@ -78,7 +91,23 @@ const PackageFields = (props: PackageFields) => {
                 />
             </FormItem>
             <FormItem label="Choose is default or not">
-                <Checkbox name="isDefault">isDefault</Checkbox>
+                <Field name="isDefault">
+                    {({ field }: FieldProps) => (
+                        <Checkbox
+                            name="isDefault"
+                            onChange={(value) => {
+                                field.onChange({
+                                    target: {
+                                        name: 'isDefault',
+                                        value: value,
+                                    },
+                                })
+                            }}
+                        >
+                            isDefault
+                        </Checkbox>
+                    )}
+                </Field>
             </FormItem>
             <FormItem
                 label="Price"
@@ -137,6 +166,41 @@ const PackageFields = (props: PackageFields) => {
                     )}
                 </Field>
             </FormItem>
+
+            <FormItem
+                label="Arabic Execution Time"
+                invalid={
+                    (errors.arabicExecutionTime &&
+                        touched.arabicExecutionTime) as boolean
+                }
+                errorMessage={errors.arabicExecutionTime}
+            >
+                <Field
+                    type="text"
+                    autoComplete="off"
+                    name="arabicExecutionTime"
+                    placeholder="Execution Time"
+                    component={Input}
+                />
+            </FormItem>
+
+            <FormItem
+                label="English Execution Time"
+                invalid={
+                    (errors.englishExecutionTime &&
+                        touched.englishExecutionTime) as boolean
+                }
+                errorMessage={errors.englishExecutionTime}
+            >
+                <Field
+                    type="text"
+                    autoComplete="off"
+                    name="englishExecutionTime"
+                    placeholder="Execution Time"
+                    component={Input}
+                />
+            </FormItem>
+
             <FieldArray
                 name="arabicItems"
                 render={(arrayHelpers) => (

@@ -38,6 +38,8 @@ type InitialData = {
     }[]
     images?: []
     link?: ''
+    arabicExecutionTime?: string
+    englishExecutionTime?: string
     // parentImgList?: []
     // parentImage: string
 }
@@ -83,6 +85,14 @@ const validationSchema = Yup.object().shape({
         Yup.string().required('English Item Name is Required')
     ),
     link: Yup.string().required('Link is Required'),
+
+    arabicExecutionTime: Yup.string().required(
+        'Arabic Execution Time is Required'
+    ),
+
+    englishExecutionTime: Yup.string().required(
+        'English Execution Time is Required'
+    ),
 
     // parentImage: Yup.mixed().required('Image is Required'),
 })
@@ -150,6 +160,8 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
             imgList: [],
             images: [],
             link: '',
+            arabicExecutionTime: '',
+            englishExecutionTime: '',
             // parentImgList: [],
             // parentImage: '',
         },
@@ -183,6 +195,16 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                     }
                     formData.append('name[ar]', data.arabicName)
                     formData.append('name[en]', data.englishName)
+
+                    formData.append(
+                        'executionTime[ar]',
+                        data.arabicExecutionTime
+                    )
+                    formData.append(
+                        'executionTime[en]',
+                        data.englishExecutionTime
+                    )
+
                     formData.append('price', data.price)
                     formData.append('type[ar]', data.arabicType)
                     formData.append('type[en]', data.englishType)
@@ -220,6 +242,7 @@ const PackageForm = forwardRef<FormikRef, PackageForm>((props, ref) => {
                             formData.append(`images`, ...item)
                         }
                     })
+                    console.log(data.isDefault)
 
                     formData.append('isDefault', data.isDefault)
                     formData.append('link', data.link)

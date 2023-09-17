@@ -4,6 +4,8 @@ import Input from '@/components/ui/Input'
 import { FormItem } from '@/components/ui/Form'
 import { Field, FormikErrors, FormikTouched, FieldProps } from 'formik'
 import { Select } from '@/components/ui'
+import { Sketch } from '@uiw/react-color'
+import { useState } from 'react'
 
 type FormFieldsName = {
     type: string
@@ -11,6 +13,7 @@ type FormFieldsName = {
     englishTitle: string
     arabicContent: string
     englishContent: string
+    color: string
 }
 
 type SystemHeaderFields = {
@@ -50,7 +53,6 @@ const SystemHeaderFields = (props: SystemHeaderFields) => {
                     component={Input}
                 />
             </FormItem>
-
             <FormItem
                 label="English Title"
                 invalid={
@@ -66,7 +68,6 @@ const SystemHeaderFields = (props: SystemHeaderFields) => {
                     component={Input}
                 />
             </FormItem>
-
             <FormItem
                 label="Type"
                 invalid={(errors.type && touched.type) as boolean}
@@ -88,7 +89,6 @@ const SystemHeaderFields = (props: SystemHeaderFields) => {
                     )}
                 </Field>
             </FormItem>
-
             <FormItem
                 label="Arabic Content"
                 labelClass="!justify-start"
@@ -108,7 +108,6 @@ const SystemHeaderFields = (props: SystemHeaderFields) => {
                     )}
                 </Field>
             </FormItem>
-
             <FormItem
                 label="English Content"
                 labelClass="!justify-start"
@@ -124,6 +123,28 @@ const SystemHeaderFields = (props: SystemHeaderFields) => {
                             onChange={(val) =>
                                 form.setFieldValue(field.name, val)
                             }
+                        />
+                    )}
+                </Field>
+            </FormItem>
+
+            <FormItem
+                label="Header Background Color"
+                invalid={(errors.color && touched.color) as boolean}
+                errorMessage={errors.color}
+            >
+                <Field name="color">
+                    {({ field }: FieldProps) => (
+                        <Sketch
+                            color={field.value}
+                            onChange={(color) => {
+                                field.onChange({
+                                    target: {
+                                        name: 'color',
+                                        value: color.hex,
+                                    },
+                                })
+                            }}
                         />
                     )}
                 </Field>

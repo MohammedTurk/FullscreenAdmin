@@ -27,6 +27,7 @@ type InitialData = {
         img: string
     }[]
     image?: string
+    color?: string
 }
 
 export type FormModel = Omit<InitialData, 'tags'> & {
@@ -111,6 +112,7 @@ const SystemHeaderForm = forwardRef<FormikRef, SystemHeaderForm>(
                 englishContent: '',
                 imageList: [],
                 image: '',
+                color: '#E5E5E5',
             },
             onFormSubmit,
             onDiscard,
@@ -138,6 +140,11 @@ const SystemHeaderForm = forwardRef<FormikRef, SystemHeaderForm>(
                         formData.append('title[en]', data.englishTitle)
                         formData.append('title[ar]', data.arabicTitle)
                         formData.append('type', data.type)
+                        if (!data.color) {
+                            formData.append('color', '#E5E5E5')
+                        } else {
+                            formData.append('color', data.color)
+                        }
 
                         onFormSubmit?.(formData, setSubmitting)
                     }}

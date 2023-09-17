@@ -36,6 +36,10 @@ export const EditPackage = () => {
     if (PackageData) {
         data.arabicName = PackageData?.name?.ar
         data.englishName = PackageData?.name?.en
+
+        data.arabicExecutionTime = PackageData?.executionTime?.ar
+        data.englishExecutionTime = PackageData?.executionTime?.en
+
         data.isDefault = PackageData?.isDefault
         data.arabicType = PackageData?.type?.ar
         data.englishType = PackageData?.type?.en
