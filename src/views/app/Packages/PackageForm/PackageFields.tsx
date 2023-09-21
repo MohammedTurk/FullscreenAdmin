@@ -51,7 +51,7 @@ const PackageFields = (props: PackageFields) => {
         { label: '7 أيام', value: '7 أيام' },
         { label: '15 أيام', value: '15 أيام' },
         { label: '21 أيام', value: '21 أيام' },
-        { label: '30 أيام', value: '30 أيام' },
+        { label: '30 يوم', value: '30 يوم' },
         { label: '3 شهور', value: '3 شهور' },
         { label: '6 شهور', value: '6 شهور' },
         { label: '9 شهور', value: '9 شهور' },
